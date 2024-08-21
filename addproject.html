@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="description" content="POS - Bootstrap Admin Template">
     <meta name="keywords"
-        content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern,  html5, responsive">
+        content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
     <title>Prosales</title>
@@ -15,7 +15,11 @@
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
+    <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+
     <link rel="stylesheet" href="assets/css/animate.css">
+
+    <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
 
     <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
 
@@ -23,13 +27,30 @@
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
 
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .content {
+            width: 75%;
+        }
+    
+        @media (max-width: 1024px) {
+            .content {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .content {
+                width: 100%;
+            }
+        }
+    
+        .form-floating label {
+            font-size: 12.24px;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- <div id="global-loader">
-        <div class="whirly-loader"> </div>
-    </div> -->
-
     <div class="main-wrapper">
 
         <div class="header">
@@ -215,8 +236,7 @@
                             <a class="dropdown-item" href="generalsettings.html"><i class="me-2"
                                     data-feather="settings"></i>Settings</a>
                             <hr class="m-0">
-                            <a class="dropdown-item logout pb-0" href="signin.html"><img
-                                    src="http://127.0.0.1:5502/images/logo%20copy.png" class="me-2" alt="img">Logout</a>
+                            <a class="dropdown-item logout pb-0" href="signin.html">Logout</a>
                         </div>
                     </div>
                 </li>
@@ -240,15 +260,18 @@
             <div class="sidebar-inner slimscroll">
                 <div id="sidebar-menu" class="sidebar-menu">
                     <ul>
-                        <li class="active">
+                        <li>
                             <a href="index.html"><img src="assets/img/icons/dashboard.svg" alt="img"><span>
                                     Dashboard</span> </a>
                         </li>
                         <li class="submenu">
-                            <a href="javascript:void(0);"><img src="assets/img/icons/product.svg" alt="img"><span>
+                            <a href=#><img src="assets/img/icons/product.svg" alt="img"><span>
                                     Projects</span> <span class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="projects.html">Projects </a></li>
+                                <li><a href="projects.html" class="active">Projects</a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="Tasks.html">Tasks</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -256,125 +279,176 @@
             </div>
         </div>
 
-        <div class="page-wrapper">
+        <div class="page-wrapper" style="text-transform: uppercase;">
             <div class="content">
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="dash-widget">
-                            <div class="dash-widgetimg">
-                                <span><img src="assets/img/icons/dash1.svg" alt="img"></span>
-                            </div>
-                            <div class="dash-widgetcontent">
-                                <h6>Total Purchase Due</h6>
-                                <h5>$<span class="counters" data-count="307144.00">$307,144.00</span></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="dash-widget dash1">
-                            <div class="dash-widgetimg">
-                                <span><img src="assets/img/icons/dash2.svg" alt="img"></span>
-                            </div>
-                            <div class="dash-widgetcontent">
-                                <h6>Total Sales Due</h6>
-                                <h5>$<span class="counters" data-count="4385.00">$4,385.00</span></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="dash-widget dash2">
-                            <div class="dash-widgetimg">
-                                <span><img src="assets/img/icons/dash3.svg" alt="img"></span>
-                            </div>
-                            <div class="dash-widgetcontent">
-                                <h6>Total Sale Amount</h6>
-                                <h5>$<span class="counters" data-count="385656.50">385,656.50</span></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="dash-widget dash3">
-                            <div class="dash-widgetimg">
-                                <span><img src="assets/img/icons/dash4.svg" alt="img"></span>
-                            </div>
-                            <div class="dash-widgetcontent">
-                                <h6>Total Sale Amount</h6>
-                                <h5>$<span class="counters" data-count="40000.00">400.00</span></h5>
-                            </div>
-                        </div>
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4 style="font-size: 31.25px; text-transform: capitalize; font-weight: 800;">Create project</h4>
+                        <!-- <h6 style="font-size: 18px; color: #777;">Add/Update Projects</h6> -->
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-lg-7 col-sm-12 col-12 d-flex">
-                        <div class="card flex-fill">
-                            <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                                <h5 class="card-title mb-0">Purchase & Sales</h5>
-                                <div class="graph-sets">
-                                    <ul>
-                                        <li>
-                                            <span>Sales</span>
-                                        </li>
-                                        <li>
-                                            <span>Purchase</span>
-                                        </li>
-                                    </ul>
-                                    <div class="dropdown">
-                                        <button class="btn btn-white btn-sm dropdown-toggle" type="button"
-                                            id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                            2022 <img src="assets/img/icons/dropdown.svg" alt="img" class="ms-2">
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <li>
-                                                <a href="javascript:void(0);" class="dropdown-item">2022</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);" class="dropdown-item">2021</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);" class="dropdown-item">2020</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                <div style="background-color: #f8f9fa; border-radius: 8px;">
+                    <form id="createProjectForm">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="projectTitle" placeholder="Enter project title" style="height: 50px; font-size: 12px;">
+                                    <label for="projectTitle" style="font-size: 10.24px;">Project Title</label>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="col-md-12">
-                                    <div class="card-body">
-                                        <div id="s-line-area" class="chart-set"></div>
-                                    </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="taskView" style="height: 50px; font-size: 10.24px; text-transform: uppercase;">
+                                        <option selected style="text-transform: uppercase;">Select Task View</option>
+                                        <option value="1" style="text-transform: uppercase;" style="text-transform: uppercase;">Computers</option>
+                                    </select>
+                                    <label for="taskView" style="font-size: 10.24px;">Default Task View</label>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 col-sm-12 col-12 d-flex">
-                        <div class="card flex-fill">
-                            <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                                <h4 class="card-title mb-0">Projects by Location</h4>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="projectPrivacy" style="height: 50px; font-size: 12px; text-transform: uppercase;">
+                                        <option selected style="text-transform: uppercase;">Select Privacy</option>
+                                        <option value="1" style="text-transform: uppercase;">Public</option>
+                                        <option value="2" style="text-transform: uppercase;">Private</option>
+                                    </select>
+                                    <label for="projectPrivacy" style="font-size: 10.24px;">Project Privacy</label>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div id="donut-chart"></div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="team" style="height: 50px; font-size: 12px; text-transform: uppercase;">
+                                        <option selected style="text-transform: uppercase;" >Select Team</option>
+                                        <option value="1" style="text-transform: uppercase;">Development</option>
+                                        <option value="2" style="text-transform: uppercase;">Design</option>
+                                    </select>
+                                    <label for="team" style="font-size: 10.24px;">Team</label>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-0">
-                    <div class="card-body">
-                        <h4 class="card-title">Marketing & SEO</h4>
-                        <div class="table-responsive dataview">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="tax" style="height: 50px; font-size: 12px;">
+                                        <option selected style="text-transform: uppercase;">Choose Tax</option>
+                                        <option value="1" style="text-transform: uppercase;">2%</option>
+                                        <option value="2" style="text-transform: uppercase;">5%</option>
+                                    </select>
+                                    <label for="tax" style="font-size: 10.24px;">Tax</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="client" style="height: 50px; font-size: 12px;">
+                                        <option selected style="text-transform: uppercase;">Select Client</option>
+                                        <option value="1" style="text-transform: uppercase;">ABC Corp</option>
+                                        <option  value="2" style="text-transform: uppercase;">XYZ Inc</option>
+                                    </select>
+                                    <label for="client" style="font-size: 10.24px;">Client</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="people" style="height: 50px; font-size: 12px;">
+                                        <option selected style="text-transform: uppercase;">Select Assignees</option>
+                                        <option value="1" style="text-transform: uppercase;">John Doe</option>
+                                        <option value="2" style="text-transform: uppercase;">Jane Smith</option>
+                                    </select>
+                                    <label for="people" style="font-size: 10.24px;">People<label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="startDate" style="height: 50px; font-size: 12px;">
+                                    <label for="startDate" style="font-size: 10.24px;">Start Date</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="deadline" style="height: 50px; font-size: 12px;">
+                                    <label for="deadline" style="font-size: 10.24px;">Deadline</label>
+                                </div>
+                            </div>
                             <div class="col-md-12">
-                                <div class="card-body">
-                                    <div id="s-col" class="chart-set"></div>
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" id="budget" placeholder="Enter budget" style="height: 50px; font-size: 12px;">
+                                    <label for="budget" style="font-size: 10.24px;">Budget</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" id="projectOverview" placeholder="Enter project title" style="height: 100px; font-size: 12px;"></textarea>
+                                    <label for="projectTitle" style="font-size: 10.24px;">Project Overview</label>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-secondary px-4" style="font-size: 12.8px; color: blue;">Cancel</button>
+                            <button type="submit" class="btn btn-primary px-4" style="font-size: 12.8px;">Create Project</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const createProjectForm = document.getElementById('createProjectForm');
+            
+            const startDateInput = document.getElementById('startDate');
+            const deadlineInput = document.getElementById('deadline');
+    
+            startDateInput.addEventListener('click', function() {
+                this.showPicker(); 
+            });
+    
+            deadlineInput.addEventListener('click', function() {
+                this.showPicker(); 
+            });
+            
+            if (createProjectForm) {
+                createProjectForm.addEventListener('submit', function(e) {
+                    e.preventDefault(); 
+                    
+                    function getInputValue(id) {
+                        const element = document.getElementById(id);
+                        return element ? element.value.trim() : null; 
+                    }
+        
+                    const projectData = {
+                        projectTitle: getInputValue('projectTitle'),
+                        taskView: getInputValue('taskView'),
+                        projectPrivacy: getInputValue('projectPrivacy'),
+                        team: getInputValue('team'),
+                        people: getInputValue('people'),
+                        startDate: getInputValue('startDate'),
+                        deadline: getInputValue('deadline'),
+                        projectOverview: getInputValue('projectOverview'),
+                        tax: getInputValue('tax'),
+                        client: getInputValue('client'),
+                        budget: getInputValue('budget')
+                    };
+        
+                    if (!projectData.projectTitle) {
+                        alert('Please enter a project title');
+                        return;
+                    }
+                    if (!projectData.startDate) {
+                        alert('Please select a start date');
+                        return;
+                    }
+                    if (!projectData.deadline) {
+                        alert('Please select a deadline');
+                        return;
+                    }
+        
+                    console.log(projectData);
+                });
+            } else {
+                console.error("Create Project form not found");
+            }
+        });
+    </script>
     <script src="assets/js/jquery-3.6.0.min.js"></script>
 
     <script src="assets/js/feather.min.js"></script>
@@ -386,8 +460,13 @@
 
     <script src="assets/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/plugins/apexchart/apexcharts.min.js"></script>
-    <script src="assets/plugins/apexchart/chart-data.js"></script>
+    <script src="assets/plugins/select2/js/select2.min.js"></script>
+
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
 
     <script src="assets/js/script.js"></script>
 </body>

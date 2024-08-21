@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Prosales - Tasks</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.jpg">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        .dashboard-header {
+            border-bottom: 1px solid #e9ecef;
+            padding: 20px 0;
+        }
+
+        .component-nav {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .component-btn {
+            padding: 15px 25px;
+            border: none;
+            background-color: transparent;
+            color: #495057;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .component-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: #007bff;
+            transition: all 0.3s ease;
+        }
+
+        .component-btn:hover {
+            color: #007bff;
+        }
+
+        .component-btn.active {
+            color: #007bff;
+        }
+
+        .component-btn.active::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .component {
+            display: none;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .component.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .component-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        .task-list, .note-list, .vendor-list, .rep-list, .activity-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .task-list li, .note-list li, .vendor-list li, .rep-list li, .activity-list li {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-list li:last-child, .note-list li:last-child, .vendor-list li:last-child, .rep-list li:last-child, .activity-list li:last-child {
+            border-bottom: none;
+        }
+
+        .badge-custom {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .kanban-column {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            height: calc(100vh - 250px);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .kanban-column:hover {
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .column-header {
+            color: #34495e;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .task-count {
+            background-color: #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .kanban-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .kanban-item {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .kanban-item:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .kanban-item .date-time {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .kanban-item .task-name {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .kanban-item .task-value {
+            float: right;
+            font-weight: 700;
+            color: #27ae60;
+            background-color: #e8f6e9;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .kanban-item .avatars {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 10px;
+        }
+
+        .kanban-item .avatars img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 5px;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .kanban-item .avatars img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Custom scrollbar */
+        .kanban-items::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .kanban-items::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .kanban-items::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 4px;
+        }
+
+        .kanban-items::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+
+        /* Add some animation for drag and drop */
+        .sortable-ghost {
+            opacity: 0.4;
+        }
+
+        .sortable-drag {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            .kanban-column {
+                height: auto;
+                min-height: 400px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .board-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .board-header .subtitle {
+                font-size: 1rem;
+            }
+            
+            .kanban-column {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div id="global-loader">
+        <div class="whirly-loader"> </div>
+    </div> -->
+
+    <div class="main-wrapper">
+
+        <div class="header">
+
+            <div class="header-left active">
+                <a href="index.html" class="logo">
+                    <img src="assets/img/logo.png" alt="">
+                </a>
+                <a href="index.html" class="logo-small">
+                    <img src="assets/img/logo-small.png" alt="">
+                </a>
+            </div>
+
+            <a id="mobile_btn" class="mobile_btn" href="#sidebar">
+                <span class="bar-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </a>
+
+            <ul class="nav user-menu">
+
+                <li class="nav-item">
+                    <div class="top-nav-search">
+                        <a href="javascript:void(0);" class="responsive-search">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <form action="#">
+                            <div class="searchinputs">
+                                <input type="text" placeholder="Search Here ...">
+                                <div class="search-addon">
+                                    <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                                </div>
+                            </div>
+                            <a class="btn" id="searchdiv"><img src="assets/img/icons/search.svg" alt="img"></a>
+                        </form>
+                    </div>
+                </li>
+
+
+                <li class="nav-item dropdown has-arrow flag-nav">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
+                        role="button">
+                        <img src="assets/img/flags/us1.png" alt="" height="20">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="assets/img/flags/us.png" alt="" height="16"> English
+                        </a>
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="assets/img/flags/fr.png" alt="" height="16"> French
+                        </a>
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="assets/img/flags/es.png" alt="" height="16"> Spanish
+                        </a>
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="assets/img/flags/de.png" alt="" height="16"> German
+                        </a>
+                    </div>
+                </li>
+
+
+                <li class="nav-item dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <img src="assets/img/icons/notification-bing.svg" alt="img"> <span
+                            class="badge rounded-pill">4</span>
+                    </a>
+                    <div class="dropdown-menu notifications">
+                        <div class="topnav-dropdown-header">
+                            <span class="notification-title">Notifications</span>
+                            <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+                        </div>
+                        <div class="noti-content">
+                            <ul class="notification-list">
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media d-flex">
+                                            <span class="avatar flex-shrink-0">
+                                                <img alt="" src="assets/img/profiles/avatar-02.jpg">
+                                            </span>
+                                            <div class="media-body flex-grow-1">
+                                                <p class="noti-details"><span class="noti-title">John Doe</span> added
+                                                    new task <span class="noti-title">Patient appointment booking</span>
+                                                </p>
+                                                <p class="noti-time"><span class="notification-time">4 mins ago</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media d-flex">
+                                            <span class="avatar flex-shrink-0">
+                                                <img alt="" src="assets/img/profiles/avatar-03.jpg">
+                                            </span>
+                                            <div class="media-body flex-grow-1">
+                                                <p class="noti-details"><span class="noti-title">Tarah Shropshire</span>
+                                                    changed the task name <span class="noti-title">Appointment booking
+                                                        with payment gateway</span></p>
+                                                <p class="noti-time"><span class="notification-time">6 mins ago</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media d-flex">
+                                            <span class="avatar flex-shrink-0">
+                                                <img alt="" src="assets/img/profiles/avatar-06.jpg">
+                                            </span>
+                                            <div class="media-body flex-grow-1">
+                                                <p class="noti-details"><span class="noti-title">Misty Tison</span>
+                                                    added <span class="noti-title">Domenic Houston</span> and <span
+                                                        class="noti-title">Claire Mapes</span> to project <span
+                                                        class="noti-title">Doctor available module</span></p>
+                                                <p class="noti-time"><span class="notification-time">8 mins ago</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media d-flex">
+                                            <span class="avatar flex-shrink-0">
+                                                <img alt="" src="assets/img/profiles/avatar-17.jpg">
+                                            </span>
+                                            <div class="media-body flex-grow-1">
+                                                <p class="noti-details"><span class="noti-title">Rolland Webber</span>
+                                                    completed task <span class="noti-title">Patient and Doctor video
+                                                        conferencing</span></p>
+                                                <p class="noti-time"><span class="notification-time">12 mins ago</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media d-flex">
+                                            <span class="avatar flex-shrink-0">
+                                                <img alt="" src="assets/img/profiles/avatar-13.jpg">
+                                            </span>
+                                            <div class="media-body flex-grow-1">
+                                                <p class="noti-details"><span class="noti-title">Bernardo Galaviz</span>
+                                                    added new task <span class="noti-title">Private chat module</span>
+                                                </p>
+                                                <p class="noti-time"><span class="notification-time">2 days ago</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="topnav-dropdown-footer">
+                            <a href="activities.html">View all Notifications</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown has-arrow main-drop">
+                    <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
+                        <span class="user-img"><img src="assets/img/profiles/avator1.jpg" alt="">
+                            <span class="status online"></span></span>
+                    </a>
+                    <div class="dropdown-menu menu-drop-user">
+                        <div class="profilename">
+                            <div class="profileset">
+                                <span class="user-img"><img src="assets/img/profiles/avator1.jpg" alt="">
+                                    <span class="status online"></span></span>
+                                <div class="profilesets">
+                                    <h6>John Doe</h6>
+                                    <h5>Admin</h5>
+                                </div>
+                            </div>
+                            <hr class="m-0">
+                            <a class="dropdown-item" href="profile.html"> <i class="me-2" data-feather="user"></i> My
+                                Profile</a>
+                            <a class="dropdown-item" href="generalsettings.html"><i class="me-2"
+                                    data-feather="settings"></i>Settings</a>
+                            <hr class="m-0">
+                            <a class="dropdown-item logout pb-0" href="signin.html"><img
+                                    src="http://127.0.0.1:5502/images/logo%20copy.png" class="me-2" alt="img">Logout</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+
+            <div class="dropdown mobile-user-menu">
+                <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="profile.html">My Profile</a>
+                    <a class="dropdown-item" href="generalsettings.html">Settings</a>
+                    <a class="dropdown-item" href="signin.html">Logout</a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a href="index.html"><img src="assets/img/icons/dashboard.svg" alt="img"><span>
+                                    Dashboard</span> </a>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><img src="assets/img/icons/product.svg" alt="img"><span>
+                                    Projects</span> <span class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="projects.html">Projects</a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="Tasks.html" class="active">Tasks</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="dashboard-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <h1 class="mb-0">Tasks</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid mt-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="component-nav">
+                                <button class="component-btn active" data-component="tasks">Tasks</button>
+                                <button class="component-btn" data-component="notes">Notes</button>
+                                <button class="component-btn" data-component="vendors">Vendors</button>
+                                <button class="component-btn" data-component="prosalesreps">Prosalesreps</button>
+                                <button class="component-btn" data-component="activity">Activity</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="tasks" class="component active">
+                            
+                                <div class="container-fluid py-4">
+                                    <div class="row" id="kanban-board">
+                                        <div class="col-lg-3 col-md-6 mb-4">
+                                            <div class="kanban-column" id="new">
+                                                <h3 class="column-header">New <span class="task-count"></span></h3>
+                                                <div class="kanban-items" data-status="new"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 mb-4">
+                                            <div class="kanban-column" id="todo">
+                                                <h3 class="column-header">Todo <span class="task-count"></span></h3>
+                                                <div class="kanban-items" data-status="todo"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 mb-4">
+                                            <div class="kanban-column" id="inprogress">
+                                                <h3 class="column-header">In Progress <span class="task-count"></span></h3>
+                                                <div class="kanban-items" data-status="inprogress"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 mb-4">
+                                            <div class="kanban-column" id="done">
+                                                <h3 class="column-header">Done <span class="task-count"></span></h3>
+                                                <div class="kanban-items" data-status="done"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <div id="notes" class="component">
+                                <h3 class="component-title">Notes</h3>
+                                
+                            </div>
+                            <div id="vendors" class="component">
+                                <h3 class="component-title">Vendors</h3>
+                                
+                            </div>
+                            <div id="prosalesreps" class="component">
+                                <h3 class="component-title">Prosalesreps</h3>
+                                
+                            </div>
+                            <div id="activity" class="component">
+                                <h3 class="component-title">Activity</h3>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+
+    <script src="assets/js/feather.min.js"></script>
+
+    <script src="assets/js/jquery.slimscroll.min.js"></script>
+
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+
+    <script src="assets/plugins/select2/js/select2.min.js"></script>
+
+    <script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+
+    <script src="assets/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const componentBtns = document.querySelectorAll('.component-btn');
+            const components = document.querySelectorAll('.component');
+
+            componentBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const componentName = this.getAttribute('data-component');
+                    
+                    componentBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    components.forEach(c => c.classList.remove('active'));
+                    document.getElementById(componentName).classList.add('active');
+                });
+            });
+        });
+
+        const tasks = [
+            { id: 1, name: "Design UI", value: "$500", status: "new", date: "2024-08-13 09:00", avatars: ["https://i.pravatar.cc/150?img=1", "https://i.pravatar.cc/150?img=2"] },
+            { id: 2, name: "Implement Backend", value: "$1000", status: "todo", date: "2024-08-13 10:30", avatars: ["https://i.pravatar.cc/150?img=3", "https://i.pravatar.cc/150?img=4"] },
+            { id: 3, name: "Test Features", value: "$300", status: "inprogress", date: "2024-08-13 14:00", avatars: ["https://i.pravatar.cc/150?img=5"] },
+            { id: 4, name: "Deploy to Production", value: "$200", status: "done", date: "2024-08-13 16:30", avatars: ["https://i.pravatar.cc/150?img=6", "https://i.pravatar.cc/150?img=7"] },
+            { id: 5, name: "Client Meeting", value: "$150", status: "new", date: "2024-08-14 11:00", avatars: ["https://i.pravatar.cc/150?img=8"] },
+            { id: 6, name: "Refactor Code", value: "$400", status: "todo", date: "2024-08-14 13:00", avatars: ["https://i.pravatar.cc/150?img=9", "https://i.pravatar.cc/150?img=10"] },
+        ];
+
+        function createTaskCard(task) {
+            const card = document.createElement('div');
+            card.className = 'kanban-item';
+            card.id = `task-${task.id}`;
+            card.innerHTML = `
+                <div class="date-time">${task.date}</div>
+                <div class="task-name">${task.name}<span class="task-value">${task.value}</span></div>
+                <div class="avatars">
+                    ${task.avatars.map(avatar => `<img src="${avatar}" alt="User Avatar">`).join('')}
+                </div>
+            `;
+            return card;
+        }
+
+        function updateTaskCounts() {
+            document.querySelectorAll('.kanban-column').forEach(column => {
+                const status = column.id;
+                const count = tasks.filter(task => task.status === status).length;
+                column.querySelector('.task-count').textContent = `(${count})`;
+            });
+        }
+
+        function initializeBoard() {
+            tasks.forEach(task => {
+                const column = document.querySelector(`.kanban-items[data-status="${task.status}"]`);
+                column.appendChild(createTaskCard(task));
+            });
+
+            updateTaskCounts();
+
+            document.querySelectorAll('.kanban-items').forEach(column => {
+                new Sortable(column, {
+                    group: 'shared',
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    dragClass: 'sortable-drag',
+                    onEnd: function (evt) {
+                        const taskId = evt.item.id.split('-')[1];
+                        const newStatus = evt.to.dataset.status;
+                        updateTaskStatus(taskId, newStatus);
+                        updateTaskCounts();
+                    }
+                });
+            });
+        }
+
+        function updateTaskStatus(taskId, newStatus) {
+            const task = tasks.find(t => t.id === parseInt(taskId));
+            if (task) {
+                task.status = newStatus;
+                console.log(`Task ${taskId} moved to ${newStatus}`);
+            }
+        }
+
+        window.onload = initializeBoard;
+
+        // Responsive behavior for task counts
+        window.addEventListener('resize', updateTaskCounts);
+    </script>
+</body>
+
+</html>
