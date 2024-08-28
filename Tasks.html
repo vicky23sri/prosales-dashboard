@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>Prosales - Tasks</title>
+    <title>Prosales</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.jpg">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- notes  -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <style>
         .dashboard-header {
@@ -64,7 +66,7 @@
 
         .component {
             display: none;
-            padding: 30px;
+            padding: 20px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -112,163 +114,697 @@
             font-weight: 600;
         }
 
+        :root {
+            --primary-color: #3874ff;
+            --background-color: #f4f5f7;
+            --column-bg: #ffffff;
+            --text-primary: #172b4d;
+            --text-secondary: #5e6c84;
+            --border-color: #dfe1e6;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .kanban-board-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        .kanban-board {
+            display: inline-flex;
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+
         .kanban-column {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            flex: 0 0 350px;
+            vertical-align: top;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+            white-space: normal;
+            width: 350px; 
+            margin-right: 35px;
+        }
+
+        /* .kanban-board-container {
+            width: 100%;
+            height: 100vh;
+            max-height: 100vh;
+            overflow-x: auto;
+            overflow-y: auto;
+            white-space: nowrap;
+        }
+
+        .kanban-board {
+            display: inline-flex;
+            width: 340px;
+            height: 100%;
             padding: 20px;
-            height: calc(100vh - 250px);
+            box-sizing: border-box;
+        }
+
+        .kanban-column {
+            flex: 0 0 350px; 
+            width: 350px;
+            height: 100%;
+            margin-right: 35px;
+            background-color: var(--column-bg);
+            border-radius: 4px;
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
-        }
-
-        .kanban-column:hover {
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-        }
+        } */
 
         .column-header {
-            color: #34495e;
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .column-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
         }
 
         .task-count {
-            background-color: #ecf0f1;
-            color: #7f8c8d;
-            font-size: 0.9rem;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
             padding: 2px 8px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            border-radius: 10px;
         }
 
         .kanban-items {
-            flex-grow: 1;
+            height: calc(100% - 60px); /* Adjust based on your header height */
             overflow-y: auto;
-            padding-right: 10px;
+            padding: 16px;
         }
 
         .kanban-item {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            margin-bottom: 15px;
-            cursor: move;
-            transition: all 0.3s ease;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
         .kanban-item:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         }
 
-        .kanban-item .date-time {
-            font-size: 0.8rem;
-            color: #7f8c8d;
+
+        .kanban-item {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .kanban-item:hover {
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .text-success {
+            color: #36b37e;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .progress-container {
+            margin-bottom: 15px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 5px;
         }
 
-        .kanban-item .task-name {
-            font-weight: 500;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
+        .progress-text, .progress-percentage {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
-        .kanban-item .task-value {
-            float: right;
-            font-weight: 700;
-            color: #27ae60;
-            background-color: #e8f6e9;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.9rem;
+        .progress {
+            height: 6px !important;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
         }
 
-        .kanban-item .avatars {
+        .progress-bar {
+            transition: width 0.6s ease;
+        }
+
+        @media (max-width: 1200px) {
+            .kanban-column {
+                flex: 0 0 350px; 
+                width: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kanban-column {
+                flex: 0 0 350px; 
+                width: 350px;
+                margin-right: 30px;
+            }
+        }
+
+
+        @media (max-width: 480px) {
+            .kanban-column {
+                flex: 0 0 320px; 
+                width: 350px;
+            }
+            .kanban-item {
+                padding: 12px;
+            }
+            .card-title {
+                font-size: 12px;
+            }
+            .text-muted, .text-success {
+                font-size: 11px;
+            }
+        }
+
+        /* notes  */
+        #editorContainer {
+            position: absolute;
+            z-index: 9999;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #4e73df;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .btn-close:hover {
+            color: #224abe;
+        }
+
+        .profile-card {
+            transition: all 0.4s ease-in-out;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+            height: 100%;
             display: flex;
-            justify-content: flex-start;
-            margin-top: 10px;
+            flex-direction: column;
         }
 
-        .kanban-item .avatars img {
-            width: 30px;
-            height: 30px;
+
+        .profile-image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 75%; 
+            overflow: hidden;
+        }
+
+        .profile-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+        }
+
+        .quick-info {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 2;
+        }
+
+        .rating-badge, .reviews-badge {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .rating-badge i {
+            color: #ffc107;
+            margin-right: 3px;
+        }
+
+        .card-body1 {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .card-text {
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .custom-btn {
+            background-color: #3874ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+            align-self: stretch;
+            box-shadow: 0 4px 6px rgba(56, 116, 255, 0.2);
+        }
+
+        .custom-btn:hover {
+            background-color: #2860e0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(56, 116, 255, 0.3);
+        }
+
+        .icon {
+            color: #3874ff;
+            margin-right: 8px;
+        }
+
+        @media (min-width: 992px) {
+            .col-lg-4 {
+                flex: 0 0 33.333333%;
+                max-width: 33.333333%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .col-xl-3 {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+        }
+
+        /* vendors */
+        .profile-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-image-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            object-fit: cover;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .quick-info {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 2;
+        }
+
+        .rating-badge, .reviews-badge {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .rating-badge i {
+            color: #ffc107;
+            margin-right: 3px;
+        }
+
+        .card-body1 {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            color: #3874ff;
+            font-size: 1.5rem;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-text i {
+            margin-right: 10px;
+            color: #3874ff;
+        }
+
+        .custom-btn {
+            background-color: #3874ff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+            align-self: center;
+            box-shadow: 0 5px 15px rgba(56, 116, 255, 0.3);
+        }
+
+        .custom-btn:hover {
+            background-color: #2860e0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(56, 116, 255, 0.4);
+            color: white;
+        }
+
+        .icon {
+            color: #3874ff;
+            margin-right: 8px;
+        }
+
+        @media (min-width: 992px) {
+            .col-lg-4 {
+                flex: 0 0 33.333333%;
+                max-width: 33.333333%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .col-xl-3 {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+        }
+
+        /* prosales */
+        .prosales-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e0e0e0;
+        }
+
+        .prosales-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .prosales-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .prosales-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .prosales-card:hover .prosales-image {
+            transform: scale(1.05);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .prosales-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .quick-info {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 2;
+        }
+
+        .rating-badge, .deals-badge {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .rating-badge i {
+            color: #ffc107;
+            margin-right: 3px;
+        }
+
+        .card-body1 {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            color: #3874ff;
+            font-size: 1.3rem;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-text i {
+            margin-right: 10px;
+            color: #3874ff;
+        }
+
+        .custom-btn {
+            background-color: #3874ff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+            align-self: center;
+            box-shadow: 0 5px 15px rgba(56, 116, 255, 0.3);
+        }
+
+        .custom-btn:hover {
+            background-color: #2860e0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(56, 116, 255, 0.4);
+        }
+
+        .icon {
+            color: #3874ff;
+            margin-right: 8px;
+        }
+
+        @media (min-width: 992px) {
+            .col-lg-4 {
+                flex: 0 0 33.333333%;
+                max-width: 33.333333%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .col-xl-3 {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+        }
+
+        /* addtask */
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .modal-title {
+            font-weight: 600;
+        }
+        .close-button {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 32px;
+            height: 32px;
+            background: #f0f0f0;
             border-radius: 50%;
-            margin-right: 5px;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .kanban-item .avatars img:hover {
-            transform: scale(1.1);
+        .close-button:hover {
+            background: #e0e0e0;
         }
-
-        /* Custom scrollbar */
-        .kanban-items::-webkit-scrollbar {
-            width: 8px;
+        .close-button::before,
+        .close-button::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 2px;
+            background: #333;
         }
-
-        .kanban-items::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
+        .close-button::before {
+            transform: rotate(45deg);
         }
-
-        .kanban-items::-webkit-scrollbar-thumb {
-            background: #bdc3c7;
-            border-radius: 4px;
+        .close-button::after {
+            transform: rotate(-45deg);
         }
-
-        .kanban-items::-webkit-scrollbar-thumb:hover {
-            background: #95a5a6;
-        }
-
-        /* Add some animation for drag and drop */
-        .sortable-ghost {
-            opacity: 0.4;
-        }
-
-        .sortable-drag {
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 991px) {
-            .kanban-column {
-                height: auto;
-                min-height: 400px;
-            }
-        }
-
-        @media (max-width: 767px) {
-            .board-header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .board-header .subtitle {
-                font-size: 1rem;
-            }
-            
-            .kanban-column {
-                margin-bottom: 20px;
-            }
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 
 <body>
-    <!-- <div id="global-loader">
-        <div class="whirly-loader"> </div>
-    </div> -->
 
     <div class="main-wrapper">
 
@@ -502,17 +1038,22 @@
         
         <div class="page-wrapper">
             <div class="content">
-                <div class="dashboard-header">
-                    <div class="container-fluid">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <h1 class="mb-0">Tasks</h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="container-fluid mt-4">
+                <div class="container-fluid">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h4>
+                                <span style="font-size: 31.20947px; font-weight: 900;">Tasks Name</span> 
+                                <span style="font-size: 31.20947px; font-weight: 400; color: #6c757d;">(32)</span>
+                            </h4>
+                        </div> 
+                        <div class="page-btn">
+                            <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#addTaskModal" style="font-size: 12.8px;">
+                                <img src="assets/img/icons/plus.svg" alt="img" class="me-1" style="width: 1.2em; height: 1.2em;">
+                                Add New Task
+                            </a>
+                        </div> 
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="component-nav">
@@ -529,47 +1070,200 @@
                         <div class="col-md-12">
                             <div id="tasks" class="component active">
                             
-                                <div class="container-fluid py-4">
-                                    <div class="row" id="kanban-board">
-                                        <div class="col-lg-3 col-md-6 mb-4">
-                                            <div class="kanban-column" id="new">
-                                                <h3 class="column-header">New <span class="task-count"></span></h3>
-                                                <div class="kanban-items" data-status="new"></div>
+                                <div class="kanban-board-container">
+                                    <div class="kanban-board">
+                                        <div class="kanban-column">
+                                            <div class="column-header">
+                                                <h3>New</h3>
+                                                <span class="task-count">0</span>
+                                            </div>
+                                            <div class="kanban-items" data-status="new"></div>
+                                        </div>
+                                        <div class="kanban-column">
+                                            <div class="column-header">
+                                                <h3>Todo</h3>
+                                                <span class="task-count">0</span>
+                                            </div>
+                                            <div class="kanban-items" data-status="todo"></div>
+                                        </div>
+                                        <div class="kanban-column">
+                                            <div class="column-header">
+                                                <h3>In Progress</h3>
+                                                <span class="task-count">0</span>
+                                            </div>
+                                            <div class="kanban-items" data-status="inprogress"></div>
+                                        </div>
+                                        <div class="kanban-column">
+                                            <div class="column-header">
+                                                <h3>Done</h3>
+                                                <span class="task-count">0</span>
+                                            </div>
+                                            <div class="kanban-items" data-status="done"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                            </div>
+                            <div id="notes" class="component">
+                                    <div class="row">
+                                        <div>
+                                            <button id="showEditorBtn" class="btn btn-primary mb-3">
+                                                <i class="fas fa-edit"></i> Show Editor
+                                            </button>
+                                        
+                                            <div id="editorContainer" class="col-md-8 mx-auto p-3 rounded d-none">
+                                                <button class="btn-close" id="closeEditorBtn">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                                <div>
+                                                    <div style="max-width: 100%; margin: 10px auto;">
+                                                        <div>
+                                                            <div style="max-width: 100%; margin: 10px auto; background-color: #ffffff; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border-radius: 12px; overflow: hidden;">
+                                                                <div id="toolbar" style="border: none; background-color: #edf2f7; padding: 15px;">
+                                                                    <span class="ql-formats" style="margin-right: 15px;">
+                                                                        <select class="ql-font" style="height: 32px; border: 1px solid #e2e8f0; border-radius: 4px; background-color: #ffffff;"></select>
+                                                                        <select class="ql-size" style="height: 32px; border: 1px solid #e2e8f0; border-radius: 4px; background-color: #ffffff;"></select>
+                                                                    </span>
+                                                                    <span class="ql-formats" style="margin-right: 15px;">
+                                                                        <button class="ql-bold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; margin-right: 5px; transition: all 0.2s ease;"></button>
+                                                                        <button class="ql-italic" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; margin-right: 5px; transition: all 0.2s ease;"></button>
+                                                                        <button class="ql-underline" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; margin-right: 5px; transition: all 0.2s ease;"></button>
+                                                                        <button class="ql-strike" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; margin-right: 5px; transition: all 0.2s ease;"></button>
+                                                                    </span>
+                                                                    <span class="ql-formats" style="margin-right: 15px;">
+                                                                        <select class="ql-color" style="height: 32px; border: 1px solid #e2e8f0; border-radius: 4px; background-color: #ffffff;"></select>
+                                                                        <select class="ql-background" style="height: 32px; border: 1px solid #e2e8f0; border-radius: 4px; background-color: #ffffff;"></select>
+                                                                    </span>
+                                                                    <span class="ql-formats" style="margin-right: 15px;">
+                                                                        <button class="ql-list" value="ordered" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; margin-right: 5px; transition: all 0.2s ease;"></button>
+                                                                        <button class="ql-list" value="bullet" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; margin-right: 5px; transition: all 0.2s ease;"></button>
+                                                                    </span>
+                                                                    <span class="ql-formats" style="margin-right: 15px;">
+                                                                        <button class="ql-link" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; margin-right: 5px; transition: all 0.2s ease;"></button>
+                                                                        <button class="ql-image" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; margin-right: 5px; transition: all 0.2s ease;"></button>
+                                                                    </span>
+                                                                </div>
+                                                                <div id="editor" style="height: 300px; font-size: 16px; border: none; padding: 20px;"></div>
+                                                                <div class="p-3 text-end">
+                                                                    <button onclick="saveContent()" style="background-color: #4a5568; color: #ffffff; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; transition: all 0.2s ease;">
+                                                                        <i class="fas fa-save me-2"></i> Save Content
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-3 col-md-6 mb-4">
-                                            <div class="kanban-column" id="todo">
-                                                <h3 class="column-header">Todo <span class="task-count"></span></h3>
-                                                <div class="kanban-items" data-status="todo"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-6 mb-4">
-                                            <div class="kanban-column" id="inprogress">
-                                                <h3 class="column-header">In Progress <span class="task-count"></span></h3>
-                                                <div class="kanban-items" data-status="inprogress"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-6 mb-4">
-                                            <div class="kanban-column" id="done">
-                                                <h3 class="column-header">Done <span class="task-count"></span></h3>
-                                                <div class="kanban-items" data-status="done"></div>
+                                        <div class="container-fluid py-5" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9eef5 100%);">
+                                            <div class="row justify-content-center">
+                                                <div class="col-11 col-lg-10">
+                                                    <div class="timeline position-relative">
+                                                        <!-- Vertical line -->
+                                                        <div class="position-absolute top-0 bottom-0 start-50 translate-middle-x" style="width: 4px; background: linear-gradient(to bottom, #6a11cb 0%, #2575fc 100%);"></div>
+                                        
+                                                        <!-- Timeline Item 1 -->
+                                                        <div class="timeline-item position-relative mb-5 d-flex">
+                                                            <div class="timeline-icon position-absolute top-0 start-50 translate-middle rounded-circle bg-white d-flex align-items-center justify-content-center shadow-lg" style="width: 80px; height: 80px; z-index: 2;">
+                                                                <div class="inner-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
+                                                                    <i class="fas fa-rocket fa-lg text-white"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card shadow-lg border-0 w-100" style="border-radius: 20px; margin-top: 40px;">
+                                                                <div class="card-body p-4">
+                                                                    <span class="badge rounded-pill mb-2" style="padding: 8px 15px;">
+                                                                        <i class="far fa-calendar-alt me-2"></i>Aug 23, 2024
+                                                                    </span>
+                                                                    <h4 class="card-title fw-bold mb-3" style="color: #2575fc;">Project Kickoff</h4>
+                                                                    <p class="card-text mb-3" style="font-size: 1rem; color: #4a4a4a;">Launch our groundbreaking Q4 marketing campaign with innovative strategies and cutting-edge tech integration.</p>
+                                                                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                                                        <div class="mb-2">
+                                                                            <i class="fas fa-users me-2" style="color: #6a11cb;"></i>
+                                                                            <span style="color: #4a4a4a;">Marketing Dream Team</span>
+                                                                        </div>
+                                                                        <div class="mb-2">
+                                                                            <i class="far fa-clock me-2" style="color: #6a11cb;"></i>
+                                                                            <span style="color: #4a4a4a;">14:30 - 16:00</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-footer border-0 py-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <span style="color: #6a11cb;"><i class="fas fa-map-marker-alt me-2"></i>Innovation Hub</span>
+                                                                        <button class="btn btn-sm rounded-pill px-4 py-2" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; border: none;">
+                                                                            <i class="fas fa-chevron-right me-2"></i>Explore
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                        
+                                                        <!-- Timeline Item 2 (reverse layout) -->
+                                                        <div class="timeline-item position-relative mb-5 d-flex justify-content-end">
+                                                            <div class="timeline-icon position-absolute top-0 start-50 translate-middle rounded-circle bg-white d-flex align-items-center justify-content-center shadow-lg" style="width: 80px; height: 80px; z-index: 2;">
+                                                                <div class="inner-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                                                                    <i class="fas fa-chart-line fa-lg text-white"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card shadow-lg border-0 w-100" style="border-radius: 20px; margin-top: 40px;">
+                                                                <div class="card-body p-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
+                                                                    <span class="badge rounded-pill mb-2" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 8px 15px;">
+                                                                        <i class="far fa-calendar-alt me-2"></i>Sep 5, 2024
+                                                                    </span>
+                                                                    <h4 class="card-title fw-bold mb-3" style="color: #11998e;">Strategy Summit</h4>
+                                                                    <p class="card-text mb-3" style="font-size: 1rem; color: #4a4a4a;">Collaborative brainstorming session to refine our approach and set ambitious yet achievable targets.</p>
+                                                                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                                                        <div class="mb-2">
+                                                                            <i class="fas fa-brain me-2" style="color: #11998e;"></i>
+                                                                            <span style="color: #4a4a4a;">Cross-Functional Team</span>
+                                                                        </div>
+                                                                        <div class="mb-2">
+                                                                            <i class="far fa-clock me-2" style="color: #11998e;"></i>
+                                                                            <span style="color: #4a4a4a;">09:00 - 17:00</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-footer border-0 py-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <span style="color: #11998e;"><i class="fas fa-video me-2"></i>Virtual Boardroom</span>
+                                                                        <button class="btn btn-sm rounded-pill px-4 py-2" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none;">
+                                                                            <i class="fas fa-chevron-right me-2"></i>Join
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                               
-                            </div>
-                            <div id="notes" class="component">
-                                <h3 class="component-title">Notes</h3>
-                                
                             </div>
                             <div id="vendors" class="component">
-                                <h3 class="component-title">Vendors</h3>
-                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="text-end" style="width: 100%; text-align: right; margin-bottom: 15px;">
+                                        <button id="addVendorBtn" class="vendor-add-btn" style="font-size: 12.8px; background-color: #3874ff; color: #ffffff; border: none; padding: 7px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                            <i class="fas fa-plus"></i>
+                                                Add Vendor
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row" id="profileContainer">
+                                    <!-- Profile cards will be dynamically inserted here -->
+                                </div>
                             </div>
+                                                                                 
                             <div id="prosalesreps" class="component">
-                                <h3 class="component-title">Prosalesreps</h3>
-                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="text-end" style="width: 100%; text-align: right; margin-bottom: 15px;">
+                                        <button id="add-prosales" class="prosales-add-btn" style="font-size: 12.8px; background-color: #3874ff; color: #ffffff; border: none; padding: 7px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                            <i class="fas fa-plus"></i>  Add Prosales
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row" id="prosalesContainer">
+                                    <!-- Prosales rep cards will be inserted here -->
+                                </div>
                             </div>
                             <div id="activity" class="component">
                                 <h3 class="component-title">Activity</h3>
@@ -577,6 +1271,75 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Task Model -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTaskModalLabel">Add New Task</h5>
+                    <button type="button" class="close-button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addTaskForm">
+                        <div class="mb-3">
+                            <label for="taskName" class="form-label">Task Name</label>
+                            <input type="text" class="form-control" id="taskName" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category" required>
+                                    <option value="">Select category</option>
+                                    <option value="1">Category 1</option>
+                                    <option value="2">Category 2</option>
+                                    <option value="3">Category 3</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="priority" class="form-label">Priority</label>
+                                <select class="form-select" id="priority" required>
+                                    <option value="">Select priority</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="startDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="startDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="endDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="endDate" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="budget" class="form-label">Budget</label>
+                            <input type="number" class="form-control" id="budget" min="0" step="0.01">
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignees" class="form-label">Assignees</label>
+                            <select class="form-control" id="assignees" multiple="multiple">
+                                <option value="1">John Doe</option>
+                                <option value="2">Jane Smith</option>
+                                <option value="3">Bob Johnson</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveTask">Save Task</button>
                 </div>
             </div>
         </div>
@@ -598,54 +1361,195 @@
 
     <script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
     <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script src="assets/js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const componentBtns = document.querySelectorAll('.component-btn');
-            const components = document.querySelectorAll('.component');
+        const componentBtns = document.querySelectorAll('.component-btn');
+        const components = document.querySelectorAll('.component');
 
-            componentBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const componentName = this.getAttribute('data-component');
-                    
-                    componentBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
+        componentBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const componentName = this.getAttribute('data-component');
+                console.log('Clicked component:', componentName);
 
-                    components.forEach(c => c.classList.remove('active'));
-                    document.getElementById(componentName).classList.add('active');
-                });
+                componentBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                components.forEach(c => c.classList.remove('active'));
+                const targetComponent = document.getElementById(componentName);
+                if (targetComponent) {
+                    targetComponent.classList.add('active');
+                    console.log('Activated component:', componentName);
+                } else {
+                    console.error('Component not found:', componentName);
+                }
             });
         });
-
+    }); 
+    </script>
+    <script>
         const tasks = [
-            { id: 1, name: "Design UI", value: "$500", status: "new", date: "2024-08-13 09:00", avatars: ["https://i.pravatar.cc/150?img=1", "https://i.pravatar.cc/150?img=2"] },
-            { id: 2, name: "Implement Backend", value: "$1000", status: "todo", date: "2024-08-13 10:30", avatars: ["https://i.pravatar.cc/150?img=3", "https://i.pravatar.cc/150?img=4"] },
-            { id: 3, name: "Test Features", value: "$300", status: "inprogress", date: "2024-08-13 14:00", avatars: ["https://i.pravatar.cc/150?img=5"] },
-            { id: 4, name: "Deploy to Production", value: "$200", status: "done", date: "2024-08-13 16:30", avatars: ["https://i.pravatar.cc/150?img=6", "https://i.pravatar.cc/150?img=7"] },
-            { id: 5, name: "Client Meeting", value: "$150", status: "new", date: "2024-08-14 11:00", avatars: ["https://i.pravatar.cc/150?img=8"] },
-            { id: 6, name: "Refactor Code", value: "$400", status: "todo", date: "2024-08-14 13:00", avatars: ["https://i.pravatar.cc/150?img=9", "https://i.pravatar.cc/150?img=10"] },
+            { id: 1, name: "Project Doughnut Dungeon", value: "500", status: "new", date: "2024-08-13 09:00", avatars: ["https://i.pravatar.cc/150?img=1", "https://i.pravatar.cc/150?img=2" ], progress: 25, taskCount: 10 },
+            { id: 2, name: "Implement Backend", value: "1000", status: "todo", date: "2024-08-13 10:30", avatars: ["https://i.pravatar.cc/150?img=3", "https://i.pravatar.cc/150?img=4"], progress: 40, taskCount: 15 },
+            { id: 3, name: "Test Features", value: "300", status: "inprogress", date: "2024-08-13 14:00", avatars: ["https://i.pravatar.cc/150?img=5"], progress: 65, taskCount: 25 },
+            { id: 4, name: "Deploy to Production", value: "200", status: "done", date: "2024-08-13 16:30", avatars: ["https://i.pravatar.cc/150?img=6", "https://i.pravatar.cc/150?img=7"], progress: 100, taskCount: 35 },
+            { id: 5, name: "Client Meeting", value: "150", status: "new", date: "2024-08-14 11:00", avatars: ["https://i.pravatar.cc/150?img=8"], progress: 0, taskCount: 5 },
+            { id: 6, name: "Refactor Code", value: "400", status: "todo", date: "2024-08-14 13:00", avatars: ["https://i.pravatar.cc/150?img=9", "https://i.pravatar.cc/150?img=10"], progress: 15, taskCount: 20 },
         ];
+
+        let autoScrollInterval;
+
+        function formatCurrency(value) {
+            const numericValue = parseFloat(value.replace(/[^0-9.-]/g, ''));
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(numericValue);
+        }
 
         function createTaskCard(task) {
             const card = document.createElement('div');
             card.className = 'kanban-item';
             card.id = `task-${task.id}`;
+            card.draggable = true;
+
+            const avatarHTML = task.avatars.map((avatar, index) => `
+                <div style="width: 32px; height: 32px; margin-left: ${index === 0 ? '0' : '-10px'}; position: relative; z-index: ${task.avatars.length - index};">
+                    <img style="width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover;" alt="User Image" src="${avatar}">
+                </div>
+            `).join('');
+
             card.innerHTML = `
-                <div class="date-time">${task.date}</div>
-                <div class="task-name">${task.name}<span class="task-value">${task.value}</span></div>
-                <div class="avatars">
-                    ${task.avatars.map(avatar => `<img src="${avatar}" alt="User Avatar">`).join('')}
+                <div class="mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center mb-3">
+                            <div class="col-auto">
+                                <h5 class="card-title mb-0" style="font-size: 20px; font-weight: 800;">${task.name}</h5>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <span class="status-badge" data-status="${task.status}" 
+                                    style="font-size: 10.24px; margin: 0px 0px 24px 0px; padding: 2px 8px; text-transform: uppercase;">
+                                    ${task.status}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md">
+                                <div class="text-muted small" style="font-size: 15.54px; font-weight: 600;">
+                                    <span style="color: black;"> <i class="fas fa-user"></i> Client :</span> 
+                                    <span style="color: #3874ff;">John Doe</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md">
+                                <div class="small" style="color: black; font-size: 15.54px; font-weight: 600;">
+                                    <i class="fas fa-dollar-sign" style="margin-right: 5px;"></i>Budget : ${formatCurrency(task.value)}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-container mb-3">
+                            <div class="progress-labels">
+                                <span class="progress-text" style="font-size: 14px; font-weight: 600;">Progress</span>
+                                <span class="progress-percentage" style="font-size: 14px; font-weight: 600;">${task.progress}%</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar" role="progressbar" style="width: ${task.progress}%;" aria-valuenow="${task.progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md">
+                                <div class="small" style="font-size: 14px; font-weight: 600;">
+                                    <i class="fas fa-calendar-alt" style="margin-right: 5px;"></i>
+                                    <span style="color: #333;">Started:</span> 
+                                    <span style="color: #999;">${new Date(task.date).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md">
+                                <div class="small" style="font-size: 14px; font-weight: 600;">
+                                    <i class="fas fa-clock" style="margin-right: 5px;"></i>
+                                    <span style="color: #333;">Deadline:</span> 
+                                    <span style="color: #999;">${new Date(task.date).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div style="display: flex;">
+                                ${avatarHTML}
+                                ${task.avatars.length > 3 ? `
+                                    <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 0;">
+                                        <span style="display: flex; width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; background-color: #e0e0e0; color: #333; font-size: 12px; font-weight: bold; align-items: center; justify-content: center;">+${task.avatars.length - 3}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div style="font-size: 14px; font-weight: 600;">
+                                <i class="fas fa-list" style="margin-right: 5px;"></i>${task.taskCount} Tasks
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
+            
+            updateProgressBar(card, task.progress);
             return card;
         }
 
-        function updateTaskCounts() {
-            document.querySelectorAll('.kanban-column').forEach(column => {
-                const status = column.id;
-                const count = tasks.filter(task => task.status === status).length;
-                column.querySelector('.task-count').textContent = `(${count})`;
+        function updateProgressBar(taskCard, percentage) {
+            const progressBar = taskCard.querySelector('.progress-bar');
+            const progressPercentage = taskCard.querySelector('.progress-percentage');
+            
+            progressBar.style.width = `${percentage}%`;
+            progressBar.setAttribute('aria-valuenow', percentage);
+            progressPercentage.textContent = `${percentage}%`;
+            
+            let color;
+            if (percentage < 30) {
+                color = '#ff6b6b';  
+            } else if (percentage < 50) {
+                color = '#feca57';  
+            } else if (percentage < 75) {
+                color = '#ffcc00';  
+            } else if (percentage < 100) {
+                color = '#48dbfb';  
+            } else {
+                color = '#1dd1a1';  
+            }
+            progressBar.style.backgroundColor = color;
+        }
+
+        function applyStatusBadgeStyles() {
+            const statusBadges = document.querySelectorAll('.status-badge');
+            statusBadges.forEach((badge) => {
+                const status = badge.dataset.status;
+                let bgColor, textColor;
+
+                switch (status) {
+                    case 'new':
+                        bgColor = '#d1ecf1';
+                        textColor = '#0c5460';
+                        break;
+                    case 'todo':
+                        bgColor = '#fff3cd';
+                        textColor = '#856404';
+                        break;
+                    case 'inprogress':
+                        bgColor = '#e3f2fd';
+                        textColor = '#1e88e5';
+                        break;
+                    case 'done':
+                        bgColor = '#e8f5e9';
+                        textColor = '#4caf50';
+                        break;
+                    default:
+                        bgColor = '#e9ecef';
+                        textColor = '#495057';
+                }
+
+                badge.style.backgroundColor = bgColor;
+                badge.style.color = textColor;
             });
         }
 
@@ -656,36 +1560,312 @@
             });
 
             updateTaskCounts();
+            applyStatusBadgeStyles();
+            setupDragAndDrop();
+        }
 
-            document.querySelectorAll('.kanban-items').forEach(column => {
-                new Sortable(column, {
-                    group: 'shared',
-                    animation: 150,
-                    ghostClass: 'sortable-ghost',
-                    dragClass: 'sortable-drag',
-                    onEnd: function (evt) {
-                        const taskId = evt.item.id.split('-')[1];
-                        const newStatus = evt.to.dataset.status;
-                        updateTaskStatus(taskId, newStatus);
-                        updateTaskCounts();
-                    }
-                });
+        function updateTaskCounts() {
+            document.querySelectorAll('.kanban-column').forEach(column => {
+                const status = column.querySelector('.kanban-items').dataset.status;
+                const count = column.querySelector('.kanban-items').children.length;
+                column.querySelector('.task-count').textContent = count;
             });
         }
 
-        function updateTaskStatus(taskId, newStatus) {
+        function setupDragAndDrop() {
+            const items = document.querySelectorAll('.kanban-item');
+            const columns = document.querySelectorAll('.kanban-items');
+
+            items.forEach(item => {
+                item.addEventListener('dragstart', dragStart);
+                item.addEventListener('dragend', dragEnd);
+            });
+
+            columns.forEach(column => {
+                column.addEventListener('dragover', dragOver);
+                column.addEventListener('dragleave', dragLeave);
+                column.addEventListener('drop', drop);
+            });
+
+            document.addEventListener('dragover', handleDragScroll);
+            document.addEventListener('dragend', () => clearInterval(autoScrollInterval));
+        }
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id);
+            setTimeout(() => {
+                e.target.classList.add('dragging');
+            }, 0);
+        }
+
+        function dragEnd(e) {
+            e.target.classList.remove('dragging');
+            clearInterval(autoScrollInterval);
+        }
+
+
+        function dragOver(e) {
+            e.preventDefault();
+            e.target.classList.add('drag-over');
+        }
+
+        function dragLeave(e) {
+            e.target.classList.remove('drag-over');
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text');
+            const draggableElement = document.getElementById(id);
+            const dropzone = e.target.closest('.kanban-items');
+            dropzone.appendChild(draggableElement);
+            e.target.classList.remove('drag-over');
+
+            // Update task status
+            const taskId = id.split('-')[1];
+            const newStatus = dropzone.dataset.status;
             const task = tasks.find(t => t.id === parseInt(taskId));
             if (task) {
                 task.status = newStatus;
-                console.log(`Task ${taskId} moved to ${newStatus}`);
+                draggableElement.querySelector('.status-badge').dataset.status = newStatus;
+                draggableElement.querySelector('.status-badge').textContent = newStatus;
+                applyStatusBadgeStyles();
+            }
+
+            updateTaskCounts();
+        }
+
+        function handleDragScroll(e) {
+            const scrollSpeed = 5;
+            const scrollThreshold = 100; 
+            const scrollContainer = document.querySelector('.kanban-board-container');
+            const containerRect = scrollContainer.getBoundingClientRect();
+
+            clearInterval(autoScrollInterval);
+
+            if (e.clientX < containerRect.left + scrollThreshold) {
+                // Scroll left
+                autoScrollInterval = setInterval(() => {
+                    scrollContainer.scrollLeft -= scrollSpeed;
+                }, 20);
+            } else if (e.clientX > containerRect.right - scrollThreshold) {
+                // Scroll right
+                autoScrollInterval = setInterval(() => {
+                    scrollContainer.scrollLeft += scrollSpeed;
+                }, 20);
             }
         }
 
         window.onload = initializeBoard;
-
-        // Responsive behavior for task counts
-        window.addEventListener('resize', updateTaskCounts);
     </script>
+
+<!-- notes -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    var quill = new Quill('#editor', {
+        modules: {
+            toolbar: '#toolbar'
+        },
+        theme: 'snow'
+    });
+
+    document.getElementById('showEditorBtn').addEventListener('click', function() {
+        var editorContainer = document.getElementById('editorContainer');
+        if (editorContainer.classList.contains('d-none')) {
+            editorContainer.classList.remove('d-none');
+            new Popper(document.getElementById('showEditorBtn'), editorContainer, {
+                placement: 'bottom-start'
+            });
+        }
+    });
+
+    document.getElementById('closeEditorBtn').addEventListener('click', function() {
+        document.getElementById('editorContainer').classList.add('d-none');
+    });
+
+    function saveContent() {
+        var content = quill.root.innerHTML;
+        console.log('Saved content:', content);
+    }
+</script>
+
+<!-- Vendors -->
+<script>
+    const users = [
+        { name: "John Doe", phone: "+1 (123) 456-7890", image: "https://img.freepik.com/free-photo/handsome-young-man-with-new-stylish-haircut_176420-19636.jpg?uid=R75331262&ga=GA1.1.1292211247.1718182866&semt=ais_hybrid" ,rating: 4.5, reviews: 12 },
+        { name: "Jane Smith", phone: "+1 (234) 567-8901", image: "https://img.freepik.com/free-photo/portrait-handsome-smiling-stylish-young-man-model-dressed-blue-shirt-clothes-fashion-man-posing_158538-4976.jpg?uid=R75331262&ga=GA1.1.1292211247.1718182866&semt=ais_hybrid", rating: 4.8, reviews: 24 },
+        { name: "Mike Johnson", phone: "+1 (345) 678-9012", image: "https://img.freepik.com/free-photo/young-beautiful-woman-pink-warm-sweater-natural-look-smiling-portrait-isolated-long-hair_285396-896.jpg?uid=R75331262&ga=GA1.1.1292211247.1718182866&semt=ais_hybrid", rating: 4.2, reviews: 8 },
+        { name: "Emily Brown", phone: "+1 (456) 789-0123", image: "https://img.freepik.com/free-photo/side-view-woman-wearing-hair-clips_23-2149872368.jpg?uid=R75331262&ga=GA1.1.1292211247.1718182866&semt=ais_hybrid", rating: 4.9, reviews: 36 },
+        { name: "David Wilson", phone: "+1 (567) 890-1234", image: "https://img.freepik.com/free-photo/portrait-handsome-confident-model-sexy-stylish-man-fashion-hipster-male-posing-near-wall-studio-isolated_158538-23679.jpg?uid=R75331262&ga=GA1.1.1292211247.1718182866&semt=ais_hybrid", rating: 4.6, reviews: 18 },
+        { name: "Sarah Davis", phone: "+1 (678) 901-2345", image: "https://img.freepik.com/free-photo/pretty-smiling-joyfully-female-with-fair-hair-dressed-casually-looking-with-satisfaction_176420-15187.jpg?uid=R75331262&ga=GA1.1.1292211247.1718182866&semt=ais_hybrid", rating: 4.7, reviews: 29 }
+    ];
+
+    function createProfileCard(user) {
+        return `
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                <div class="profile-card">
+                    <div class="profile-image-container">
+                        <img src="${user.image}" alt="${user.name}" class="profile-image">
+                        <div class="image-overlay"></div>
+                        <div class="quick-info">
+                            <span class="rating-badge">
+                                <i class="fas fa-star"></i> ${user.rating}
+                            </span>
+                            <span class="reviews-badge">
+                                ${user.reviews} reviews
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body1">
+                        <h5 class="card-title"><i class="fas fa-user-circle"></i> ${user.name}</h5>
+                        <p class="card-text"><i class="fas fa-phone-alt icon"></i>${user.phone}</p>
+                        <button class="btn custom-btn" onclick="contactUser('${user.name}')">
+                            Contact Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function getRatingStars(rating) {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar;
+
+        return (
+            '<i class="fas fa-star"></i>'.repeat(fullStars) +
+            '<i class="fas fa-star-half-alt"></i>'.repeat(halfStar) +
+            '<i class="far fa-star"></i>'.repeat(emptyStars)
+        );
+    }
+
+    function renderProfileCards() {
+        const profileContainer = document.getElementById('profileContainer');
+        profileContainer.innerHTML = users.map(createProfileCard).join('');
+    }
+
+    renderProfileCards();
+</script>
+
+<!-- prosales -->
+<script>
+    const prosalesReps = [
+        { name: "Alex Morgan", phone: "+1 (123) 456-7890", image: "https://img.freepik.com/free-photo/cheerful-curly-business-girl-wearing-glasses_176420-206.jpg", rating: 4.7, deals: 45 },
+        { name: "Chris Taylor", phone: "+1 (234) 567-8901", image: "https://img.freepik.com/free-photo/young-businessman-with-notebook_1098-20857.jpg", rating: 4.9, deals: 62 },
+        { name: "Samantha Lee", phone: "+1 (345) 678-9012", image: "https://img.freepik.com/free-photo/smiling-confident-businesswoman-posing-with-arms-folded_1262-20950.jpg", rating: 4.5, deals: 38 },
+        { name: "Ryan Garcia", phone: "+1 (456) 789-0123", image: "https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg", rating: 4.8, deals: 55 },
+        { name: "Emma Wilson", phone: "+1 (567) 890-1234", image: "https://img.freepik.com/free-photo/young-beautiful-woman-smart-casual-wear_273609-21432.jpg", rating: 4.6, deals: 41 },
+        { name: "Daniel Kim", phone: "+1 (678) 901-2345", image: "https://img.freepik.com/free-photo/young-asian-businessman-checking-time_23-2148036135.jpg", rating: 4.7, deals: 49 }
+    ];
+
+    function createProsalesRepCard(rep) {
+        return `
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                <div class="prosales-card">
+                    <div class="prosales-image-container">
+                        <img src="${rep.image}" alt="${rep.name}" class="prosales-image">
+                        <div class="image-overlay"></div>
+                        <div class="quick-info">
+                            <span class="rating-badge">
+                                <i class="fas fa-star"></i> ${rep.rating}
+                            </span>
+                            <span class="deals-badge">
+                                ${rep.deals} deals
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body1">
+                        <h5 class="card-title"><i class="fas fa-user-tie"></i> ${rep.name}</h5>
+                        <p class="card-text"><i class="fas fa-phone-alt icon"></i>${rep.phone}</p>
+                        <button class="btn custom-btn" onclick="contactRep('${rep.name}')">
+                            Schedule Meeting
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderProsalesRepCards() {
+        const prosalesContainer = document.getElementById('prosalesContainer');
+        prosalesContainer.innerHTML = prosalesReps.map(createProsalesRepCard).join('');
+    }
+
+    renderProsalesRepCards();
+</script>
+
+<!-- addtask  -->
+<script>
+    $(document).ready(function() {
+        $('#assignees').select2({
+            placeholder: "Select assignees",
+            allowClear: true,
+            dropdownParent: $('#addTaskModal')
+        });
+
+        $('#startDate, #endDate').on('change', function() {
+            validateDates();
+        });
+
+        $('#saveTask').click(function() {
+            if ($('#addTaskForm')[0].checkValidity() && validateDates()) {
+                var formData = {
+                    taskName: $('#taskName').val(),
+                    category: $('#category').val(),
+                    priority: $('#priority').val(),
+                    startDate: $('#startDate').val(),
+                    endDate: $('#endDate').val(),
+                    description: $('#description').val(),
+                    budget: $('#budget').val(),
+                    assignees: $('#assignees').val()
+                };
+
+                console.log('Task data:', formData);
+
+                showAlert('Task added successfully!', 'success');
+
+                $('#addTaskModal').modal('hide');
+
+                resetForm();
+            } else {
+                $('#addTaskForm')[0].reportValidity();
+            }
+        });
+
+        function resetForm() {
+            $('#addTaskForm')[0].reset();
+            $('#assignees').val(null).trigger('change');
+            $('.alert').remove();
+        }
+
+        function validateDates() {
+            var startDate = new Date($('#startDate').val());
+            var endDate = new Date($('#endDate').val());
+
+            if (startDate > endDate) {
+                showAlert('End date must be after start date', 'danger');
+                return false;
+            }
+
+            $('.alert').remove();
+            return true;
+        }
+
+        function showAlert(message, type) {
+            var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+                            message +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                            '</div>';
+            $('.modal-body').prepend(alertHtml);
+        }
+
+        $('#addTaskModal').on('hidden.bs.modal', function () {
+            resetForm();
+        });
+    });
+</script>
+
 </body>
 
 </html>

@@ -26,9 +26,6 @@
 
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
-        .nav-underline {
-            border-bottom: 2px solid #e9ecef;
-        }
         .nav-underline .nav-link {
             color: #495057;
             font-weight: 500;
@@ -84,6 +81,81 @@
             top: 50%;
             transform: translateY(-50%);
             color: #6c757d;
+        }
+        .btn-outline-primary.active {
+            background-color: #007bff;
+            color: white;
+        }
+        @media (max-width: 767px) {
+            .container-fluid .row > div {
+                margin-bottom: 15px;
+            }
+            .d-flex.flex-wrap {
+                justify-content: center !important;
+            }
+            form {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .btn-group {
+                margin-left: auto;
+            }
+        }
+
+        /* card view */
+        .project-status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .text-success {
+            color: #36b37e;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .progress-container1 {
+            margin-bottom: 15px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .progress-text, .progress-percentage {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress {
+            height: 6px !important;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            transition: width 0.6s ease;
+        }
+
+        .task-link:hover .card-title {
+            text-decoration: underline;
+            color: #3874ff !important;
         }
     </style>
 </head>
@@ -321,18 +393,22 @@
             </div>
         </div>
 
-        <div class="page-wrapper">
-            <div class="content">
-                <div class="page-header">
-                    <div class="page-title">
-                        <h4>Product List</h4>
-                        <h6>Manage your products</h6>
+            <div class="page-wrapper">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h4>
+                                <span style="font-size: 31.20947px; font-weight: 900;">Projects</span> 
+                                <span style="font-size: 31.20947px; font-weight: 400; color: #6c757d;">(32)</span>
+                            </h4>
+                        </div> 
+                        <div class="page-btn">
+                            <a href="addproject.html" class="btn btn-added" style="font-size: 12.8px;">
+                                <img src="assets/img/icons/plus.svg" alt="img" class="me-1" style="width: 1.2em; height: 1.2em;">
+                                Add New Project
+                            </a>
+                        </div>                                    
                     </div>
-                    <div class="page-btn">
-                        <a href="addproject.html" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img"
-                                class="me-1">Add New Product</a>
-                    </div>
-                </div>
                     <div class="container-fluid mt-4">
                         <div class="row align-items-center">
                             <div class="col-lg-8 col-md-7">
@@ -359,155 +435,63 @@
                                     </a>
                                 </nav>
                             </div>
-                            
                             <div class="col-lg-4 col-md-5">
-                                <form>
-                                    <div class="position-relative">
-                                        <input class="form-control border-1 shadow-lg py-2 ps-5" 
-                                               type="search" 
-                                               placeholder="Search projects" 
-                                               aria-label="Search" 
-                                               style="border-radius: 10px; transition: all 0.3s ease; background-color: #f8f9fa;">
-                                        <i class="fas fa-search position-absolute top-50 translate-middle-y" 
-                                           style="left: 20px; color: #6c757d;"></i>
+                                <div class="d-flex gap-2 justify-content-md-end justify-content-start">
+                                    <!-- Search Form -->
+                                    <form style="width: 100%; max-width: 300px;">
+                                        <div class="position-relative">
+                                            <input class="form-control border-1 py-2 px-5" type="search" placeholder="Search projects"
+                                                aria-label="Search"
+                                                style="border-radius: 0.5rem; transition: all 0.3s ease; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); height: 36px; border: 1px solid #ced4da;">
+                                            <i class="fas fa-search position-absolute top-50 translate-middle-y"
+                                                style="left: 15px; color: #6c757d;"></i>
+                                        </div>
+                                    </form>
+                            
+                                    <!-- View Buttons -->
+                                    <div class="btn-container"
+                                        style="display: flex; gap: 10px; border-radius: 5px; overflow: hidden;">
+                                        <button id="listView" type="button" class="btn"
+                                            style="background-color: white; border: 1px solid #ced4da; width: 40px; height: 36px; padding-right: 10px; padding-left: 10px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                                            <i class="fas fa-list" id="listViewIcon" style="font-size: 14px; color: black;"></i>
+                                        </button>
+                                        <button id="gridView" type="button" class="btn"
+                                            style="background-color: white; border: 1px solid #ced4da; width: 40px; height: 36px; padding-right: 10px; padding-left: 10px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                                            <i class="fas fa-th-large" id="gridViewIcon" style="font-size: 14px; color: black;"></i>
+                                        </button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
+                            
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table" style="border-collapse: separate; border-spacing: 0; margin-top: 24px;">
-                            <thead>
-                                <tr>
-                                    <!-- <th style="padding: 15px; font-weight: 600; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-align: center; vertical-align: middle; text-transform: uppercase;">
-                                        <label class="checkboxs" style="cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
-                                            <input type="checkbox" id="select-all" style="display: none;">
-                                            <span class="checkmarks" style="border: 2px solid #ddd; border-radius: 3px; width: 18px; height: 18px;"></span>
-                                        </label>
-                                    </th> -->
-                                    <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Project Name</th>
-                                    <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Assignee</th>
-                                    <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Start Date</th>
-                                    <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Deadline</th>
-                                    <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Progress</th>
-                                    <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Status</th>
-                                    <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Action</th>
-                                </tr>                                    
-                            </thead>
-                            <tbody>
-                                <tr style="transition: all 0.3s ease;">
-                                    <!-- <td style="padding: 20px; border-bottom: 1px solid #dee2e6; text-align: center; vertical-align: middle;">
-                                        <label class="checkboxs" style="cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
-                                            <input type="checkbox" style="display: none;">
-                                            <span class="checkmarks" style="border: 2px solid #ddd; border-radius: 3px; width: 18px; height: 18px;"></span>
-                                        </label>
-                                    </td>-->
-                                    <td style="padding: 24px 8px 24px 0px; border-bottom: 1px solid #dee2e6;">
-                                        <a href="Tasks.html" id="projectLink" style="font-size: 16px; font-weight: 700; color: #3874ff; text-decoration: none;" 
-                                           onmouseover="this.style.textDecoration='underline'; this.style.color='#2851a3';"
-                                           onmouseout="this.style.textDecoration='none'; this.style.color='#3874ff';">
-                                            Project Doughnut Dungeon
-                                        </a>
-                                    </td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
-                                        <div style="display: flex;">
-                                            <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 3;">
-                                                <img style="width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover;" alt="User Image" src="assets/img/profiles/avatar-03.jpg">
-                                            </div>
-                                            <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 2;">
-                                                <img style="width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover;" alt="User Image" src="assets/img/profiles/avatar-04.jpg">
-                                            </div>
-                                            <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 1;">
-                                                <span style="display: flex; width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; background-color: #e0e0e0; color: #333; font-size: 12px; font-weight: bold; align-items: center; justify-content: center;">CF</span>
-                                            </div>
-                                            <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 0;">
-                                                <span style="display: flex; width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; background-color: #e0e0e0; color: #333; font-size: 12px; font-weight: bold; align-items: center; justify-content: center;">+6</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 20px; font-weight: 400; border-bottom: 1px solid #dee2e6; font-size: 12.8px;">Nov 17, 2020</td>
-                                    <td style="padding: 20px; font-weight: 400; border-bottom: 1px solid #dee2e6; font-size: 12.8px;">May 21, 2028</td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6; font-weight: 700;">
-                                        <div class="progress-container" style="width: 150px;">
-                                            <div class="progress-info" style="margin-bottom: 5px;">
-                                                <small class="text-muted" style="font-size: 0.7rem; font-weight: 400;">140/250</small>
-                                            </div>
-                                            <div class="progress" style="height: 3px; background-color: #e9ecef; border-radius: 3px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 56%; background-color: #4caf50; border-radius: 3px;" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
-                                        <span class="status-badge" data-status="Completed">Completed</span>
-                                    </td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
-                                        <a class="me-3" href="addproject.html" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background-color: #f8f9fa; border: 1px solid #e9ecef; text-decoration: none; transition: all 0.3s ease;">
-                                            <img src="assets/img/icons/edit.svg" alt="Edit" style="width: 16px; height: 16px;">
-                                        </a>
-                                        <a class="confirm-text" href="javascript:void(0);" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background-color: #f8f9fa; border: 1px solid #e9ecef; text-decoration: none; transition: all 0.3s ease;">
-                                            <img src="assets/img/icons/delete.svg" alt="Delete" style="width: 16px; height: 16px;">
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr style="transition: all 0.3s ease;">
-                                    <!-- <td style="padding: 20px; border-bottom: 1px solid #dee2e6; text-align: center; vertical-align: middle;">
-                                        <label class="checkboxs" style="cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
-                                            <input type="checkbox" style="display: none;">
-                                            <span class="checkmarks" style="border: 2px solid #ddd; border-radius: 3px; width: 18px; height: 18px;"></span>
-                                        </label>
-                                    </td>                                         -->
-                                    <td style="padding: 10px 8px 10px 0px; border-bottom: 1px solid #dee2e6;">
-                                        <a href="Tasks.html" id="projectLink" style="font-size: 16px; font-weight: 700; color: #3874ff; text-decoration: none;" 
-                                           onmouseover="this.style.textDecoration='underline'; this.style.color='#2851a3';"
-                                           onmouseout="this.style.textDecoration='none'; this.style.color='#3874ff';">
-                                            Execution of Micky the foul mouse
-                                        </a>
-                                    </td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
-                                        <div style="display: flex;">
-                                            <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 3;">
-                                                <img style="width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover;" alt="User Image" src="assets/img/profiles/avatar-03.jpg">
-                                            </div>
-                                            <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 2;">
-                                                <img style="width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover;" alt="User Image" src="assets/img/profiles/avatar-04.jpg">
-                                            </div>
-                                            <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 1;">
-                                                <span style="display: flex; width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; background-color: #e0e0e0; color: #333; font-size: 12px; font-weight: bold; align-items: center; justify-content: center;">CF</span>
-                                            </div>
-                                            <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 0;">
-                                                <span style="display: flex; width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; background-color: #e0e0e0; color: #333; font-size: 12px; font-weight: bold; align-items: center; justify-content: center;">+6</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6; font-size: 12.8px;">Mar 08, 2021</td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6; font-size: 12.8px;">Sep 15, 2022</td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6; font-weight: 700;">
-                                        <div class="progress-container" style="width: 150px;">
-                                            <div class="progress-info" style="margin-bottom: 5px;">
-                                                <small class="text-muted" style="font-size: 0.7rem; font-weight: 400;">140/250</small>
-                                            </div>
-                                            <div class="progress" style="height: 3px; background-color: #e9ecef; border-radius: 3px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 56%; background-color: #4caf50; border-radius: 3px;" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
-                                        <span class="status-badge" data-status="Inactive">Inactive</span>
-                                    </td>
-                                    <!-- <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
-                                        <span class="status-badge" data-status="In Progress">In Progress</span>
-                                    </td>                                   -->
-                                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
-                                        <a class="me-3" href="addproject.html" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background-color: #f8f9fa; border: 1px solid #e9ecef; text-decoration: none; transition: all 0.3s ease;">
-                                            <img src="assets/img/icons/edit.svg" alt="Edit" style="width: 16px; height: 16px;">
-                                        </a>
-                                        <a class="confirm-text" href="javascript:void(0);" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background-color: #f8f9fa; border: 1px solid #e9ecef; text-decoration: none; transition: all 0.3s ease;">
-                                            <img src="assets/img/icons/delete.svg" alt="Delete" style="width: 16px; height: 16px;">
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div id="listContainer">
+                        <div class="table-responsive" >
+                            <table class="table" style="border-collapse: separate; border-spacing: 0; margin-top: 24px;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Project Name</th>
+                                        <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Assignee</th>
+                                        <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Start Date</th>
+                                        <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Deadline</th>
+                                        <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Progress</th>
+                                        <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Status</th>
+                                        <th style="padding: 10px 8px 10px 0px; font-weight: bold; font-size: 12px; color: #495057; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- This will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="gridContainer" class="row" style="display: none;">
+                        <div class="mt-5">
+                            <div id="projectCards" class="row">
+                                <!-- Project cards will be inserted here dynamically -->
+                            </div>
+                        </div>
                     </div>
                     </div>
                 </div>
@@ -532,46 +516,474 @@
                 link.addEventListener('click', selectItem);
             });
         });
+    </script>
 
-        const statusBadges = document.querySelectorAll('.status-badge');
+    <!-- table -->
+    <script>
+        const projectsData = [
+            {
+                name: "Project Doughnut Dungeon",
+                assignees: [
+                    { img: "https://i.pravatar.cc/150?img=1" },
+                    { img: "https://i.pravatar.cc/150?img=2" },
+                    { img: "https://i.pravatar.cc/150?img=3" },
+                    { img: "https://i.pravatar.cc/150?img=4" },
+                    { initials: "CF" }
+                ],
+                additionalAssignees: 6,
+                startDate: "Nov 17, 2020",
+                deadline: "May 21, 2028",
+                progress: 56,
+                status: "Completed"
+            },
+            {
+                name: "Execution of Micky the foul mouse",
+                assignees: [
+                    { img: "assets/img/profiles/avatar-03.jpg" },
+                    { img: "assets/img/profiles/avatar-04.jpg" },
+                    { initials: "CF" }
+                ],
+                additionalAssignees: 6,
+                startDate: "Mar 08, 2021",
+                deadline: "Sep 15, 2022",
+                progress: 56,
+                status: "Inactive"
+            },
+            {
+                name: "The Great Cookie Caper",
+                assignees: [
+                { img: "https://i.pravatar.cc/150?img=1" },
+                    { img: "https://i.pravatar.cc/150?img=2" },
+                    { img: "https://i.pravatar.cc/150?img=3" },
+                    { img: "https://i.pravatar.cc/150?img=4" },
+                ],
+                additionalAssignees: 3,
+                startDate: "Jan 01, 2023",
+                deadline: "Dec 31, 2023",
+                progress: 75,
+                status: "In Progress"
+            },
+            {
+                name: "Operation Rubber Duck",
+                assignees: [
+                    { img: "https://i.pravatar.cc/150?img=1" },
+                    { img: "https://i.pravatar.cc/150?img=2" },
+                    { img: "https://i.pravatar.cc/150?img=3" },
+                    { img: "https://i.pravatar.cc/150?img=4" },
+                ],
+                additionalAssignees: 1,
+                startDate: "Jun 15, 2022",
+                deadline: "Jun 14, 2024",
+                progress: 10,
+                status: "In Progress"
+            },
+            {
+                name: "The Pancake Stack Overflow",
+                assignees: [
+                    { initials: "AP" },
+                    { initials: "BQ" }
+                ],
+                additionalAssignees: 0,
+                startDate: "Sep 01, 2023",
+                deadline: "Aug 31, 2024",
+                progress: 95,
+                status: "Completed"
+            },
+            {
+                name: "Quantum Quiche Quest",
+                assignees: [
+                    { img: "https://i.pravatar.cc/150?img=1" },
+                    { img: "https://i.pravatar.cc/150?img=2" },
+                    { img: "https://i.pravatar.cc/150?img=3" },
+                    { img: "https://i.pravatar.cc/150?img=4" },
+                ],
+                additionalAssignees: 4,
+                startDate: "Apr 01, 2024",
+                deadline: "Mar 31, 2025",
+                progress: 0,
+                status: "Inactive"
+            },
+            {
+                name: "The Spaghetti Code Untangler",
+                assignees: [
+                    { img: "https://i.pravatar.cc/150?img=1" },
+                    { img: "https://i.pravatar.cc/150?img=2" },
+                    { img: "https://i.pravatar.cc/150?img=3" },
+                    { img: "https://i.pravatar.cc/150?img=4" },
+                ],
+                additionalAssignees: 2,
+                startDate: "Jul 01, 2023",
+                deadline: "Jun 30, 2026",
+                progress: 50,
+                status: "In Progress"
+            }
+        ];
+    
+        function generateTableRows(projects) {
+            return projects.map(project => {
+                let progressColor;
+                if (project.progress < 30) {
+                    progressColor = '#ff6b6b';
+                } else if (project.progress < 50) {
+                    progressColor = '#feca57';
+                } else if (project.progress < 75) {
+                    progressColor = '#ffcc00';
+                } else if (project.progress < 100) {
+                    progressColor = '#48dbfb';
+                } else {
+                    progressColor = '#1dd1a1';
+                }
 
+                let statusBadgeClass = '';
+                switch (project.status.toLowerCase()) {
+                    case 'completed':
+                        statusBadgeClass = 'bg-success text-light'; 
+                        break;
+                    case 'inactive':
+                        statusBadgeClass = 'bg-danger text-light'; 
+                        break;
+                    case 'active':
+                        statusBadgeClass = 'bg-warning text-dark'; 
+                        break;
+                    case 'in progress':
+                        statusBadgeClass = 'bg-info text-dark'; 
+                        break;
+                    default:
+                        statusBadgeClass = 'bg-secondary text-light';
+                }
+
+                const displayedAssignees = project.assignees.slice(0, 3);
+                const additionalCount = project.assignees.length > 3 ? project.assignees.length - 3 : 0;
+
+                return `
+                <tr style="transition: all 0.3s ease;">
+                    <td style="padding: 24px 8px 24px 0px; border-bottom: 1px solid #dee2e6;">
+                        <a href="Tasks.html" class="projectLink" style="font-size: 15.94px; font-weight: 700; color: #3874ff; text-decoration: none;"
+                        onmouseover="this.style.textDecoration='underline'; this.style.color='#2851a3';"
+                        onmouseout="this.style.textDecoration='none'; this.style.color='#3874ff';">
+                            ${project.name}
+                        </a>
+                    </td>
+                     <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
+                        <div style="display: flex; align-items: center;">
+                            ${displayedAssignees.map((assignee, index) => `
+                                <div style="width: 32px; height: 32px; margin-left: ${index === 0 ? '0' : '-10px'}; position: relative; z-index: ${3 - index};">
+                                    ${assignee.img ? 
+                                        `<img style="width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover;" alt="User Image" src="${assignee.img}">` :
+                                        `<span style="display: flex; width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; background-color: #e0e0e0; color: #333; font-size: 12px; font-weight: bold; align-items: center; justify-content: center;">${assignee.initials}</span>`
+                                    }
+                                </div>
+                            `).join('')}
+                            ${additionalCount > 0 ? `
+                                <div style="width: 32px; height: 32px; margin-left: -10px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; background-color: #e0e0e0; color: #333; font-size: 12px; font-weight: bold;">
+                                    +${additionalCount}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </td>
+                    <td style="padding: 20px; font-weight: 400; border-bottom: 1px solid #dee2e6; font-size: 12.8px;">${project.startDate}</td>
+                    <td style="padding: 20px; font-weight: 400; border-bottom: 1px solid #dee2e6; font-size: 12.8px;">${project.deadline}</td>
+                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6; font-weight: 700;">
+                        <div class="progress-container" style="width: 150px; position: relative;">
+                            <div class="progress-info" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <small class="text-muted" style="font-size: 0.7rem; font-weight: 400;">${project.progress}/250</small>
+                                <small class="percentage-value" style="font-size: 0.7rem; font-weight: 400;">${project.progress}%</small>
+                            </div>
+                            <div class="progress" style="height: 3px !important; background-color: #e9ecef; border-radius: 3px;">
+                                <div class="progress-bar" role="progressbar" 
+                                    style="width: ${project.progress}%; background-color: ${progressColor}; border-radius: 3px;" 
+                                    aria-valuenow="${project.progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6; text-transform: uppercase;">
+                        <span class="badge ${statusBadgeClass}">${project.status}</span>
+                    </td>
+                    <td style="padding: 20px; border-bottom: 1px solid #dee2e6;">
+                        <a class="me-3" href="addproject.html" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background-color: #f8f9fa; border: 1px solid #e9ecef; text-decoration: none; transition: all 0.3s ease;">
+                            <img src="assets/img/icons/edit.svg" alt="Edit" style="width: 16px; height: 16px;">
+                        </a>
+                        <a class="confirm-text" href="javascript:void(0);" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background-color: #f8f9fa; border: 1px solid #e9ecef; text-decoration: none; transition: all 0.3s ease;">
+                            <img src="assets/img/icons/delete.svg" alt="Delete" style="width: 16px; height: 16px;">
+                        </a>
+                    </td>
+                </tr>
+            `;
+            }).join('');
+        }
+    
+        function selectItem(event) {
+            event.preventDefault();
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+    
+        function updateTable() {
+            const tableBody = document.querySelector('table tbody');
+            tableBody.innerHTML = generateTableRows(projectsData);
+            applyStatusBadgeStyles();
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', selectItem);
+            });
+            updateTable();
+        });
+    </script>
+     
+    
+
+    <!-- switch button -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gridViewBtn = document.getElementById('gridView');
+            const listViewBtn = document.getElementById('listView');
+            const gridContainer = document.getElementById('gridContainer');
+            const listContainer = document.getElementById('listContainer');
+
+            const gridViewIcon = document.getElementById('gridViewIcon');
+            const listViewIcon = document.getElementById('listViewIcon');
+
+            function setActiveView(activeBtn, inactiveBtn, activeIcon, inactiveIcon, activeContainer, inactiveContainer) {
+                activeIcon.style.color = '#007bff';
+                inactiveIcon.style.color = 'black';
+                activeContainer.style.display = 'block';
+                inactiveContainer.style.display = 'none';
+            }
+
+            // Initialize default view
+            setActiveView(listViewBtn, gridViewBtn, listViewIcon, gridViewIcon, listContainer, gridContainer);
+
+            gridViewBtn.addEventListener('click', function() {
+                setActiveView(gridViewBtn, listViewBtn, gridViewIcon, listViewIcon, gridContainer, listContainer);
+            });
+
+            listViewBtn.addEventListener('click', function() {
+                setActiveView(listViewBtn, gridViewBtn, listViewIcon, gridViewIcon, listContainer, gridContainer);
+            });
+        });
+    </script>
+
+    <!-- card view  -->
+    <script>
+        const projectData = [
+        {
+            name: "Project Doughnut Dungeon",
+            status: "inprogress",
+            client: "John Doe",
+            value: 50000,
+            progress: 75,
+            startDate: "2023-01-15",
+            deadline: "2023-12-31",
+            avatars: ["https://i.pravatar.cc/150?img=1", "https://i.pravatar.cc/150?img=2", "https://i.pravatar.cc/150?img=3", "https://i.pravatar.cc/150?img=4" ],
+            taskCount: 12
+        },
+        {
+            name: "Water resistant mosquito killer gun",
+            status: "todo",
+            client: "Jane Smith",
+            value: 75000,
+            progress: 30,
+            startDate: "2023-03-01",
+            deadline: "2024-02-29",
+            avatars: ["https://i.pravatar.cc/150?img=3", "https://i.pravatar.cc/150?img=4"],
+            taskCount: 8
+        },
+        {
+            name: "Execution of Micky the foul mouse",
+            status: "done",
+            client: "Bob Johnson",
+            value: 100000,
+            progress: 100,
+            startDate: "2022-11-01",
+            deadline: "2023-10-31",
+            avatars: ["https://i.pravatar.cc/150?img=3", "https://i.pravatar.cc/150?img=4"],
+            taskCount: 15
+        },
+        {
+            name: "Making the Butterflies shoot each other dead",
+            status: "new",
+            client: "Alice Brown",
+            value: 25000,
+            progress: 0,
+            startDate: "2023-06-01",
+            deadline: "2023-12-31",
+            avatars: ["https://i.pravatar.cc/150?img=9", "https://i.pravatar.cc/150?img=10"],
+            taskCount: 5
+        }
+    ];
+
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+    }
+
+    function createAvatarHTML(avatars) {
+        let html = '';
+        avatars.slice(0, 3).forEach((avatar, index) => {
+            html += `
+                <div style="width: 32px; height: 32px; margin-left: ${index ? '-10px' : '0'}; position: relative; z-index: ${3 - index};">
+                    <img src="${avatar}" alt="User Avatar" style="width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; object-fit: cover;">
+                </div>
+            `;
+        });
+        return html;
+    }
+
+    function createProjectCard(task) {
+        return `
+            <div class="col-xl-3 col-md-6 col-12 mb-4">
+                <div class="card h-90">
+                    <div class="card-body d-flex flex-column">
+                        <div class="row align-items-center mb-3">
+                            <div class="col-auto">
+                                <a href="Tasks.html" class="task-link" data-task-id="${task.id}" style="text-decoration: none; color: inherit; display: block;">
+                                    <h5 class="card-title mb-0" style="font-size: 20px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: inherit; margin: 0; transition: color 0.3s ease;">
+                                        ${task.name}
+                                    </h5>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <span class="project-status-badge" data-status="${task.status}" 
+                                    style="font-size: 10.24px; margin: 0px 0px 24px 0px; padding: 2px 8px; text-transform: uppercase;">
+                                    ${task.status}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md">
+                                <div class="text-muted small" style="font-size: 15.54px; font-weight: 600;">
+                                    <span style="color: black;"> <i class="fas fa-user"></i> Client :</span> 
+                                    <span style="color: #3874ff;">${task.client}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md">
+                                <div class="small" style="color: black; font-size: 15.54px; font-weight: 600;">
+                                    <i class="fas fa-dollar-sign" style="margin-right: 5px;"></i>Budget : ${formatCurrency(task.value)}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-container1 mb-3">
+                            <div class="progress-labels">
+                                <span class="progress-text" style="font-size: 14px; font-weight: 600;">Progress</span>
+                                <span class="progress-percentage" style="font-size: 14px; font-weight: 600;">${task.progress}%</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar" role="progressbar" style="width: ${task.progress}%;" aria-valuenow="${task.progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md">
+                                <div class="small" style="font-size: 14px; font-weight: 600;">
+                                    <i class="fas fa-calendar-alt" style="margin-right: 5px;"></i>
+                                    <span style="color: #333;">Started:</span> 
+                                    <span style="color: #999;">${new Date(task.startDate).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md">
+                                <div class="small" style="font-size: 14px; font-weight: 600;">
+                                    <i class="fas fa-clock" style="margin-right: 5px;"></i>
+                                    <span style="color: #333;">Deadline:</span> 
+                                    <span style="color: #999;">${new Date(task.deadline).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div style="display: flex;">
+                                ${createAvatarHTML(task.avatars)}
+                                ${task.avatars.length > 3 ? `
+                                    <div style="width: 32px; height: 32px; margin-left: -10px; position: relative; z-index: 0;">
+                                        <span style="display: flex; width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; background-color: #e0e0e0; color: #333; font-size: 12px; font-weight: bold; align-items: center; justify-content: center;">+${task.avatars.length - 3}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div style="font-size: 14px; font-weight: 600;">
+                                <i class="fas fa-list" style="margin-right: 5px;"></i>${task.taskCount} Tasks
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateProgressBar(taskCard, percentage) {
+        const progressBar = taskCard.querySelector('.progress-bar');
+        const progressPercentage = taskCard.querySelector('.progress-percentage');
+        
+        progressBar.style.width = `${percentage}%`;
+        progressBar.setAttribute('aria-valuenow', percentage);
+        progressPercentage.textContent = `${percentage}%`;
+        
+        let color;
+        if (percentage < 30) {
+            color = '#ff6b6b';
+        } else if (percentage < 50) {
+            color = '#feca57';
+        } else if (percentage < 75) {
+            color = '#ffcc00';
+        } else if (percentage < 100) {
+            color = '#48dbfb';
+        } else {
+            color = '#1dd1a1';
+        }
+        progressBar.style.backgroundColor = color;
+    }
+
+    function applyStatusBadgeStyles() {
+        const statusBadges = document.querySelectorAll('.project-status-badge');
         statusBadges.forEach((badge) => {
             const status = badge.dataset.status;
-            let bgColor, textColor, padding, borderRadius;
-
+            let bgColor, textColor;
+            
             switch (status) {
-                case 'Completed':
-                    bgColor = '#e8f5e9';
-                    textColor = '#4caf50';
-                    padding = '4px 10px';
-                    borderRadius = '5px';
+                case 'new':
+                    bgColor = '#d1ecf1';
+                    textColor = '#0c5460';
                     break;
-                case 'Inactive':
-                    bgColor = '#f8d7da';
-                    textColor = '#dc3545';
-                    padding = '4px 10px';
-                    borderRadius = '5px';
+                case 'todo':
+                    bgColor = '#fff3cd';
+                    textColor = '#856404';
                     break;
-                case 'In Progress':
+                case 'inprogress':
                     bgColor = '#e3f2fd';
                     textColor = '#1e88e5';
-                    padding = '4px 10px';
-                    borderRadius = '5px';
+                    break;
+                case 'done':
+                    bgColor = '#e8f5e9';
+                    textColor = '#4caf50';
                     break;
                 default:
                     bgColor = '#e9ecef';
                     textColor = '#495057';
-                    padding = '4px 10px';
-                    borderRadius = '5px';
             }
-
+            
             badge.style.backgroundColor = bgColor;
             badge.style.color = textColor;
-            badge.style.padding = padding;
-            badge.style.borderRadius = borderRadius;
-            badge.style.fontSize = '10.24px';
-            badge.style.fontWeight = '600';
         });
+    }
+
+    function renderProjects() {
+        const projectCardsContainer = document.getElementById('projectCards');
+        projectCardsContainer.innerHTML = projectData.map(createProjectCard).join('');
+        
+        applyStatusBadgeStyles();
+        
+        document.querySelectorAll('.card').forEach(card => {
+            const progressValue = parseInt(card.querySelector('.progress-bar').getAttribute('aria-valuenow'));
+            updateProgressBar(card, progressValue);
+        });
+    }
+
+    renderProjects();
     </script>
 
     <script src="assets/js/jquery-3.6.0.min.js"></script>
