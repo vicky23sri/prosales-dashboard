@@ -467,6 +467,10 @@
             }
         }
 
+        .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            padding: 5px !important;
+        }
+
         /* vendors */
         .profile-card {
             background-color: #ffffff;
@@ -801,6 +805,26 @@
             border: none;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
+
+        /* propsale add */
+        .prosales-add-btn {
+            font-size: 0.8rem;
+            background-color: #3874ff;
+            transition: background-color 0.3s ease;
+        }
+        .prosales-add-btn:hover {
+            background-color: #2d5cd0;
+        }
+        .uk-prefix {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-right: none;
+            color: #495057;
+        }
+        #imagePreview {
+            max-height: 200px;
+            object-fit: contain;
+        }
     </style>
 </head>
 
@@ -1061,7 +1085,7 @@
                                 <button class="component-btn" data-component="notes">Notes</button>
                                 <button class="component-btn" data-component="vendors">Vendors</button>
                                 <button class="component-btn" data-component="prosalesreps">Prosalesreps</button>
-                                <button class="component-btn" data-component="activity">Activity</button>
+                                <!-- <button class="component-btn" data-component="activity">Activity</button> -->
                             </div>
                         </div>
                     </div>
@@ -1165,7 +1189,7 @@
                                                         <div class="timeline-item position-relative mb-5 d-flex">
                                                             <div class="timeline-icon position-absolute top-0 start-50 translate-middle rounded-circle bg-white d-flex align-items-center justify-content-center shadow-lg" style="width: 80px; height: 80px; z-index: 2;">
                                                                 <div class="inner-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
-                                                                    <i class="fas fa-rocket fa-lg text-white"></i>
+                                                                    <span class="text-white font-weight-bold">28 Aug</span>
                                                                 </div>
                                                             </div>
                                                             <div class="card shadow-lg border-0 w-100" style="border-radius: 20px; margin-top: 40px;">
@@ -1200,15 +1224,12 @@
                                                         <!-- Timeline Item 2 (reverse layout) -->
                                                         <div class="timeline-item position-relative mb-5 d-flex justify-content-end">
                                                             <div class="timeline-icon position-absolute top-0 start-50 translate-middle rounded-circle bg-white d-flex align-items-center justify-content-center shadow-lg" style="width: 80px; height: 80px; z-index: 2;">
-                                                                <div class="inner-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-                                                                    <i class="fas fa-chart-line fa-lg text-white"></i>
+                                                                <div class="inner-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); line-height: 1;">
+                                                                    <span class="text-white font-weight-bold text-center" style="font-size: 14px;">Sep 5, 2024</span>
                                                                 </div>
-                                                            </div>
+                                                            </div>                                                            
                                                             <div class="card shadow-lg border-0 w-100" style="border-radius: 20px; margin-top: 40px;">
                                                                 <div class="card-body p-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
-                                                                    <span class="badge rounded-pill mb-2" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 8px 15px;">
-                                                                        <i class="far fa-calendar-alt me-2"></i>Sep 5, 2024
-                                                                    </span>
                                                                     <h4 class="card-title fw-bold mb-3" style="color: #11998e;">Strategy Summit</h4>
                                                                     <p class="card-text mb-3" style="font-size: 1rem; color: #4a4a4a;">Collaborative brainstorming session to refine our approach and set ambitious yet achievable targets.</p>
                                                                     <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -1241,23 +1262,51 @@
                             </div>
                             <div id="vendors" class="component">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="text-end" style="width: 100%; text-align: right; margin-bottom: 15px;">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
                                         <button id="addVendorBtn" class="vendor-add-btn" style="font-size: 12.8px; background-color: #3874ff; color: #ffffff; border: none; padding: 7px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                                            <i class="fas fa-plus"></i>
-                                                Add Vendor
+                                            <i class="fas fa-plus me-2"></i>Add Vendor
                                         </button>
                                     </div>
                                 </div>
                                 <div class="row" id="profileContainer">
                                     <!-- Profile cards will be dynamically inserted here -->
                                 </div>
+                                <div class="modal fade" id="vendorModal" tabindex="-1" aria-labelledby="vendorModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="vendorModalLabel">Add New Vendor</h5>
+                                                <button type="button" class="close-button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="vendorForm">
+                                                    <div class="mb-3">
+                                                        <label for="vendorName" class="form-label">Name</label>
+                                                        <input type="text" class="form-control" id="vendorName" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="vendorMobile" class="form-label">Mobile Number</label>
+                                                        <input type="tel" class="form-control" id="vendorMobile" required pattern="[0-9]*" inputmode="numeric">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="vendorImage" class="form-label">Profile Image</label>
+                                                        <input type="file" class="form-control" id="vendorImage" accept="image/*" required>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button type="submit" class="btn btn-primary">Add Vendor</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                            
                             </div>
                                                                                  
                             <div id="prosalesreps" class="component">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="text-end" style="width: 100%; text-align: right; margin-bottom: 15px;">
-                                        <button id="add-prosales" class="prosales-add-btn" style="font-size: 12.8px; background-color: #3874ff; color: #ffffff; border: none; padding: 7px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                                            <i class="fas fa-plus"></i>  Add Prosales
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <button id="add-prosales" class="btn prosales-add-btn text-white fw-bold rounded shadow-sm">
+                                            <i class="fas fa-plus me-1"></i> Add Prosales
                                         </button>
                                     </div>
                                 </div>
@@ -1265,12 +1314,49 @@
                                     <!-- Prosales rep cards will be inserted here -->
                                 </div>
                             </div>
-                            <div id="activity" class="component">
+                            <!-- <div id="activity" class="component">
                                 <h3 class="component-title">Activity</h3>
                                 
-                            </div>
+                            </div> -->
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- prosales reps add Modal -->
+    <div class="modal fade" id="prosalesModal" tabindex="-1" aria-labelledby="prosalesModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="prosalesModalLabel">Add ProSalereps</h5>
+                    <button type="button" class="close-button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="prosalesForm">
+                        <div class="mb-3">
+                            <label for="prosalesName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="prosalesName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prosalesMobile" class="form-label">Mobile Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text uk-prefix">+44</span>
+                                <input type="tel" class="form-control" id="prosalesMobile" required pattern="[0-9]*" inputmode="numeric">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prosalesImage" class="form-label">Profile Photo</label>
+                            <input type="file" class="form-control" id="prosalesImage" accept="image/*" required>
+                            <div class="mt-2">
+                                <img id="imagePreview" src="#" alt="Preview" class="img-fluid d-none">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Add ProSales Rep</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1286,51 +1372,64 @@
                 </div>
                 <div class="modal-body">
                     <form id="addTaskForm">
-                        <div class="mb-3">
-                            <label for="taskName" class="form-label">Task Name</label>
-                            <input type="text" class="form-control" id="taskName" required>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="category" class="form-label">Category</label>
-                                <select class="form-select" id="category" required>
-                                    <option value="">Select category</option>
-                                    <option value="1">Category 1</option>
-                                    <option value="2">Category 2</option>
-                                    <option value="3">Category 3</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="priority" class="form-label">Priority</label>
-                                <select class="form-select" id="priority" required>
-                                    <option value="">Select priority</option>
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                </select>
+                        <div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="taskName" placeholder="Enter project title" style="height: 50px; font-size: 12px;">
+                                <label for="taskName" style="font-size: 10.24px;">Task Name</label>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="startDate" class="form-label">Start Date</label>
-                                <input type="date" class="form-control" id="startDate" required>
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="priority" style="height: 50px; font-size: 12px; text-transform: uppercase;">
+                                        <option selected style="text-transform: uppercase;">Select category</option>
+                                        <option value="1" style="text-transform: uppercase;">Category 1</option>
+                                        <option value="2" style="text-transform: uppercase;">Category 2</option>
+                                    </select>
+                                    <label for="priority" style="font-size: 10.24px;">Project Privacy</label>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="endDate" class="form-label">End Date</label>
-                                <input type="date" class="form-control" id="endDate" required>
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="priority" style="height: 50px; font-size: 12px; text-transform: uppercase;">
+                                        <option selected style="text-transform: uppercase;" >Select priority</option>
+                                        <option value="low" style="text-transform: uppercase;">Low</option>
+                                        <option value="medium" style="text-transform: uppercase;">Medium</option>
+                                        <option value="high" style="text-transform: uppercase;">High</option>
+                                    </select>
+                                    <label for="priority" style="font-size: 10.24px;">Team</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" rows="3"></textarea>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="startDate" style="height: 50px; font-size: 12px;" required>
+                                    <label for="startDate" style="font-size: 10.24px;">Start Date</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="endDate" style="height: 50px; font-size: 12px;" required>
+                                    <label for="endDate" style="font-size: 10.24px;">Deadline</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="budget" class="form-label">Budget</label>
-                            <input type="number" class="form-control" id="budget" min="0" step="0.01">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="description" placeholder="Enter project title" style="height: 100px; font-size: 12px;"></textarea>
+                                <label for="description" style="font-size: 10.24px;">Description</label>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="assignees" class="form-label">Assignees</label>
-                            <select class="form-control" id="assignees" multiple="multiple">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="budget" placeholder="Enter budget" style="height: 50px; font-size: 12px;">
+                                <label for="budget" style="font-size: 10.24px;">Budget</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="assignees" class="form-label"  style="font-size: 10.24px; padding: 5px;">Assignees</label>
+                            <select class="form-control" id="assignees" multiple="multiple" style="height: 50px; font-size: 12px; padding: 5px;margin: 15px; text-transform: uppercase;">
                                 <option value="1">John Doe</option>
                                 <option value="2">Jane Smith</option>
                                 <option value="3">Bob Johnson</option>
@@ -1338,7 +1437,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="margin-top: -12px; margin-bottom: 3px;">
                     <button type="button" class="btn btn-primary" id="saveTask">Save Task</button>
                 </div>
             </div>
@@ -1866,6 +1965,103 @@
     });
 </script>
 
+<!-- addvendormodal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addVendorBtn = document.getElementById('addVendorBtn');
+        const vendorModal = new bootstrap.Modal(document.getElementById('vendorModal'));
+        const vendorForm = document.getElementById('vendorForm');
+        const profileContainer = document.getElementById('profileContainer');
+        const vendorMobile = document.getElementById('vendorMobile');
+
+        addVendorBtn.addEventListener('click', () => {
+            vendorModal.show();
+        });
+
+        vendorMobile.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        vendorForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('vendorName').value;
+            const mobile = vendorMobile.value;
+            const imageFile = document.getElementById('vendorImage').files[0];
+
+            console.log('Form submitted with the following values:');
+            console.log('Name:', name);
+            console.log('Mobile:', mobile);
+            console.log('Image File:', imageFile);
+
+            if (name && mobile && imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const profileCard = createProfileCard(name, mobile, event.target.result);
+                    profileContainer.appendChild(profileCard);
+                    
+                    console.log('Profile card created for:', name);
+                }
+                reader.readAsDataURL(imageFile);
+
+                vendorModal.hide();
+                vendorForm.reset();
+            }
+        });
+    });
+</script>
+
+<!-- addprosale -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addProsalesBtn = document.getElementById('add-prosales');
+        const prosalesModal = new bootstrap.Modal(document.getElementById('prosalesModal'));
+        const prosalesForm = document.getElementById('prosalesForm');
+        const prosalesMobile = document.getElementById('prosalesMobile');
+        const prosalesImage = document.getElementById('prosalesImage');
+        const imagePreview = document.getElementById('imagePreview');
+
+        addProsalesBtn.addEventListener('click', () => {
+            prosalesModal.show();
+        });
+
+        // Restrict input to numbers only
+        prosalesMobile.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // Image preview
+        prosalesImage.addEventListener('change', function(e) {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove('d-none');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        prosalesForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('prosalesName').value;
+            const mobile = '+44' + prosalesMobile.value;
+            const imageFile = prosalesImage.files[0];
+
+            // Console log the form values
+            console.log('Form submitted with the following values:');
+            console.log('Name:', name);
+            console.log('Mobile:', mobile);
+            console.log('Image File:', imageFile);
+
+            // Close the modal and reset the form
+            prosalesModal.hide();
+            prosalesForm.reset();
+            imagePreview.classList.add('d-none');
+        });
+    });
+</script>
 </body>
 
 </html>
